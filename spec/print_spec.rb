@@ -44,6 +44,24 @@ apropos "a predicate looks nice with you to_s it" do
 
 end
 
-apropos "a predicate looks nice with you inspect it" do
+apropos "inspect is like to_s except it's multiline, so you see the tree structure" do
   include Predicated
+  
+  test "an uncomplicated predicate prints on one line" do
+    assert { Predicate { Eq(1, 1) }.inspect == "Eq(1,1)" }
+  end
+  
+  test "complex" do
+    assert { 
+      Predicate { And(Eq(1, 1), Or(Eq(2, 2), Eq(3, 3))) }.inspect == 
+%{And(
+  Eq(1,1),
+  Or(
+    Eq(2,2),
+    Eq(3,3)
+  )
+)
+}
+    }
+  end
 end
