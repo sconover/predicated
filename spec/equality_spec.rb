@@ -7,7 +7,7 @@ apropos "prove value equality" do
   
   test "simple" do
     assert { Predicate { Eq(1, 1) } == Predicate { Eq(1, 1) } }
-    deny { Predicate { Eq(1, 1) } == Predicate { Eq(1, 99) } }
+    deny   { Predicate { Eq(1, 1) } == Predicate { Eq(1, 99) } }
   end
   
   test "complex" do
