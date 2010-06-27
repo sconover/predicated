@@ -1,4 +1,4 @@
-require "spec/spec_helper"
+require "test/test_helper"
 
 require "predicated/predicate"
 

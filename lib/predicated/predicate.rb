@@ -9,6 +9,9 @@ module Predicated
   end
   
   class Binary
+    
+    attr_accessor :left, :right
+    
     def initialize(left, right)
       @left = left
       @right = right
@@ -33,16 +36,11 @@ module Predicated
     module ValueEquality
       def ==(other)
         self.class == other.class && 
-        @left == other.instance_variable_get("@left".to_sym) && 
-        @right == other.instance_variable_get("@right".to_sym)
+        self.left == other.left && 
+        self.right == other.right
       end
     end
     include ValueEquality
-    
-    private
-    def left; @left end
-    def right; @right end
-
   end
   
   class Operation < Binary; end
