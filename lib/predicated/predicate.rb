@@ -9,14 +9,46 @@ module Predicated
   end
   
   class Binary
+	  
+	
     def initialize(left, right)
       @left = left
       @right = right
     end
-    
+		
+		
+		module FlipThroughMe
+			def each(&block)
+				yield(self)
+				enumerate_side(@left, &block)
+				enumerate_side(@right, &block)
+			end
+			
+			private 
+			def enumerate_side(thing)
+				if thing.is_a?(Enumerable)
+					thing.each { |item| yield(item) }
+				else
+					yield(thing)
+				end
+			end
+		end
+		include FlipThroughMe
+		include Enumerable
+		
+		module ValueEquality
+			def ==(other)
+				self.class == other.class && 
+				@left == other.instance_variable_get("@left".to_sym) && 
+				@right == other.instance_variable_get("@right".to_sym)
+			end
+    end
+		include ValueEquality
+		
     private
     def left; @left end
     def right; @right end
+
   end
   
   class Operation < Binary; end
