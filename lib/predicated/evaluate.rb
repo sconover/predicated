@@ -24,4 +24,15 @@ module Predicated
   class GreaterThan < Operation; private; def sign; ">" end end
   class LessThanOrEqualTo < Operation; private; def sign; "<=" end end
   class GreaterThanOrEqualTo < Operation; private; def sign; ">=" end end
+
+  class And
+    def evaluate(context=binding())
+      true_or_evaluate(left, context) && true_or_evaluate(right, context)
+    end
+    
+    private 
+    def true_or_evaluate(thing, context)
+      thing==true || thing.evaluate(context)
+    end
+  end
 end

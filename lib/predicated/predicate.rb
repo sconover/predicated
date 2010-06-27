@@ -8,7 +8,7 @@ module Predicated
     result
   end
   
-  class Operation
+  class Binary
     def initialize(left, right)
       @left = left
       @right = right
@@ -20,16 +20,20 @@ module Predicated
     def right; @right end
   end
   
+  class Operation < Binary
+  end
+  
   module Predicate
-    {:Equal => :eq,
-     :LessThan => :lt,
-     :GreaterThan => :gt,
-     :LessThanOrEqualTo => :lte,
-     :GreaterThanOrEqualTo => :gte}.each do |operation_class_name, shorthand|
-       Predicated.const_set(operation_class_name, Class.new(Operation))
+    [[:And, :And, Class.new(Binary)],
+     [:Equal, :Eq, Class.new(Operation)],
+     [:LessThan, :Lt, Class.new(Operation)],
+     [:GreaterThan, :Gt, Class.new(Operation)],
+     [:LessThanOrEqualTo, :Lte, Class.new(Operation)],
+     [:GreaterThanOrEqualTo, :Gte, Class.new(Operation)]].each do |operation_class_name, shorthand, class_object|
+       Predicated.const_set(operation_class_name, class_object)
        module_eval(%{
          def #{shorthand}(left, right)
-           #{operation_class_name}.new(left, right)
+           ::Predicated::#{operation_class_name}.new(left, right)
          end
        })
      end

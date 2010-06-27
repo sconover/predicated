@@ -9,32 +9,32 @@ apropos "evaluating predicates" do
   
   apropos "proving out basic operations" do
     test "equals" do
-      assert { Predicate { eq(1, 1) }.evaluate }
-      deny { Predicate { eq(1, 2) }.evaluate }
+      assert { Predicate { Eq(1, 1) }.evaluate }
+      deny { Predicate { Eq(1, 2) }.evaluate }
     end
   
     test "less than" do
-      assert { Predicate { lt(1, 2) }.evaluate }
-      deny { Predicate { lt(2, 2) }.evaluate }
-      deny { Predicate { lt(3, 2) }.evaluate }
+      assert { Predicate { Lt(1, 2) }.evaluate }
+      deny { Predicate { Lt(2, 2) }.evaluate }
+      deny { Predicate { Lt(3, 2) }.evaluate }
     end
 
     test "greater than" do
-      deny { Predicate { gt(1, 2) }.evaluate }
-      deny { Predicate { gt(2, 2) }.evaluate }
-      assert { Predicate { gt(3, 2) }.evaluate }
+      deny { Predicate { Gt(1, 2) }.evaluate }
+      deny { Predicate { Gt(2, 2) }.evaluate }
+      assert { Predicate { Gt(3, 2) }.evaluate }
     end
 
     test "less than or equal to" do
-      assert { Predicate { lte(1, 2) }.evaluate }
-      assert { Predicate { lte(2, 2) }.evaluate }
-      deny { Predicate { lte(3, 2) }.evaluate }
+      assert { Predicate { Lte(1, 2) }.evaluate }
+      assert { Predicate { Lte(2, 2) }.evaluate }
+      deny { Predicate { Lte(3, 2) }.evaluate }
     end
   
     test "greater than or equal to" do
-      deny { Predicate { gte(1, 2) }.evaluate }
-      assert { Predicate { gte(2, 2) }.evaluate }
-      assert { Predicate { gte(3, 2) }.evaluate }
+      deny { Predicate { Gte(1, 2) }.evaluate }
+      assert { Predicate { Gte(2, 2) }.evaluate }
+      assert { Predicate { Gte(3, 2) }.evaluate }
     end
 
   end
@@ -42,37 +42,52 @@ apropos "evaluating predicates" do
   apropos "binding / context" do
     test "if we pass in a binding, that is the context for the evaluation" do
       x = 1
-      assert { Predicate { eq(x, 1) }.evaluate(binding()) }
-      deny { Predicate { eq(x, 2) }.evaluate(binding()) }
+      assert { Predicate { Eq(x, 1) }.evaluate(binding()) }
+      deny { Predicate { Eq(x, 2) }.evaluate(binding()) }
     
       a = "1"
-      assert { Predicate { eq(a, "1") }.evaluate(binding()) }
-      deny { Predicate { eq(a, "a") }.evaluate(binding()) }
-      deny { Predicate { eq(a, 1) }.evaluate(binding()) }
+      assert { Predicate { Eq(a, "1") }.evaluate(binding()) }
+      deny { Predicate { Eq(a, "a") }.evaluate(binding()) }
+      deny { Predicate { Eq(a, 1) }.evaluate(binding()) }
       
       b = "b"
-      assert { Predicate { eq(b, "b") }.evaluate(binding()) }
-      assert { Predicate { eq(b, b) }.evaluate(binding()) }
+      assert { Predicate { Eq(b, "b") }.evaluate(binding()) }
+      assert { Predicate { Eq(b, b) }.evaluate(binding()) }
       
-      deny { Predicate { eq(a, b) }.evaluate(binding()) }
+      deny { Predicate { Eq(a, b) }.evaluate(binding()) }
       b = "1"
-      assert { Predicate { eq(a, b) }.evaluate(binding()) }
+      assert { Predicate { Eq(a, b) }.evaluate(binding()) }
+      
+      c = "true"
+      assert { Predicate { Eq("true", c) }.evaluate(binding()) }
+      deny { Predicate { Eq(true, c) }.evaluate(binding()) }
     end
   end
 
   apropos "comparing values of different data types" do
     test "strings" do
-      assert { Predicate { eq("1", "1") }.evaluate }
-      deny { Predicate { eq("1", 1) }.evaluate }
-      deny { Predicate { eq("1", nil) }.evaluate }
+      assert { Predicate { Eq("1", "1") }.evaluate }
+      deny { Predicate { Eq("1", 1) }.evaluate }
+      deny { Predicate { Eq("1", nil) }.evaluate }
+    end
+  
+    test "booleans" do
+      assert { Predicate { Eq(true, true) }.evaluate }
+      deny { Predicate { Eq(false, true) }.evaluate }
+      
+      deny { Predicate { Eq(false, nil) }.evaluate }
+      deny { Predicate { Eq(true, nil) }.evaluate }
+      
+      deny { Predicate { Eq("false", false) }.evaluate }
+      deny { Predicate { Eq("true", true) }.evaluate }
     end
   
     test "numbers" do
-      assert { Predicate { eq(1, 1) }.evaluate }
-      assert { Predicate { eq(1, 1.0) }.evaluate }
-      assert { Predicate { eq(1.0, 1.0) }.evaluate }
-      deny { Predicate { eq(1, 2) }.evaluate }
-      deny { Predicate { eq(1, nil) }.evaluate }
+      assert { Predicate { Eq(1, 1) }.evaluate }
+      assert { Predicate { Eq(1, 1.0) }.evaluate }
+      assert { Predicate { Eq(1.0, 1.0) }.evaluate }
+      deny { Predicate { Eq(1, 2) }.evaluate }
+      deny { Predicate { Eq(1, nil) }.evaluate }
     end
 
     class Color
@@ -87,11 +102,29 @@ apropos "evaluating predicates" do
     end
 
     test "objects" do
-      assert { Predicate { eq(Color.new("red"), Color.new("red")) }.evaluate }
-      deny { Predicate { eq(Color.new("red"), Color.new("BLUE")) }.evaluate }
-      deny { Predicate { eq(Color.new("red"), 2) }.evaluate }
-      deny { Predicate { eq(Color.new("red"), "red") }.evaluate }
-      deny { Predicate { eq(Color.new("red"), nil) }.evaluate }
+      assert { Predicate { Eq(Color.new("red"), Color.new("red")) }.evaluate }
+      deny { Predicate { Eq(Color.new("red"), Color.new("BLUE")) }.evaluate }
+      deny { Predicate { Eq(Color.new("red"), 2) }.evaluate }
+      deny { Predicate { Eq(Color.new("red"), "red") }.evaluate }
+      deny { Predicate { Eq(Color.new("red"), nil) }.evaluate }
     end
   end
+  
+  
+  apropos "and" do
+    test "left and right must be true" do
+      assert { Predicate { And( Eq(1, 1), Eq(2, 2)) }.evaluate }
+      deny { Predicate { And( Eq(99, 1), Eq(2, 2)) }.evaluate }
+      deny { Predicate { And( Eq(1, 1), Eq(99, 2)) }.evaluate }
+    end
+
+    test "simple true and false" do
+      assert { Predicate { And( true, true ) }.evaluate }
+      assert { Predicate { And( true, Eq(2, 2) ) }.evaluate }
+      deny { Predicate { And( true, false ) }.evaluate }
+      deny { Predicate { And( Eq(2, 2), false ) }.evaluate }
+    end
+  end
+  
+  
 end
