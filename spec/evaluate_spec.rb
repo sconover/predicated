@@ -110,9 +110,9 @@ apropos "evaluating predicates" do
   
   apropos "and" do
     test "left and right must be true" do
-      assert { Predicate { And( Eq(1, 1), Eq(2, 2)) }.evaluate }
-      deny { Predicate { And( Eq(99, 1), Eq(2, 2)) }.evaluate }
-      deny { Predicate { And( Eq(1, 1), Eq(99, 2)) }.evaluate }
+      assert { Predicate { And( Eq(1, 1), Eq(2, 2) ) }.evaluate }
+      deny { Predicate { And( Eq(99, 1), Eq(2, 2) ) }.evaluate }
+      deny { Predicate { And( Eq(1, 1), Eq(99, 2) ) }.evaluate }
     end
 
     test "simple true and false work too" do
