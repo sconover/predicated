@@ -118,13 +118,27 @@ apropos "evaluating predicates" do
       deny { Predicate { And( Eq(1, 1), Eq(99, 2)) }.evaluate }
     end
 
-    test "simple true and false" do
+    test "simple true and false work too" do
       assert { Predicate { And( true, true ) }.evaluate }
       assert { Predicate { And( true, Eq(2, 2) ) }.evaluate }
       deny { Predicate { And( true, false ) }.evaluate }
       deny { Predicate { And( Eq(2, 2), false ) }.evaluate }
     end
+    
+    test "nested" do
+      assert { Predicate { And( true, And(true, true) ) }.evaluate }
+      deny { Predicate { And( false, And(true, true) ) }.evaluate }
+      deny { Predicate { And( true, And(true, false) ) }.evaluate }
+    end
   end
   
+  apropos "or" do
+    test "one of left or right must be true" do
+      assert { Predicate { Or(true, true) }.evaluate }
+      assert { Predicate { Or(true, false) }.evaluate }
+      assert { Predicate { Or(false, true) }.evaluate }
+      deny { Predicate { Or(false, false) }.evaluate }
+    end
+  end  
   
 end

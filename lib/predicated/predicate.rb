@@ -25,6 +25,7 @@ module Predicated
   
   module Predicate
     [[:And, :And, Class.new(Binary)],
+     [:Or, :Or, Class.new(Binary)],
      [:Equal, :Eq, Class.new(Operation)],
      [:LessThan, :Lt, Class.new(Operation)],
      [:GreaterThan, :Gt, Class.new(Operation)],

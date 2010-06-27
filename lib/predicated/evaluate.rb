@@ -25,14 +25,31 @@ module Predicated
   class LessThanOrEqualTo < Operation; private; def sign; "<=" end end
   class GreaterThanOrEqualTo < Operation; private; def sign; ">=" end end
 
-  class And
-    def evaluate(context=binding())
-      true_or_evaluate(left, context) && true_or_evaluate(right, context)
-    end
-    
+  module Container
     private 
-    def true_or_evaluate(thing, context)
-      thing==true || thing.evaluate(context)
+    def boolean_or_evaluate(thing, context)
+      if thing.is_a?(FalseClass)
+        false
+      elsif thing.is_a?(TrueClass)
+        true
+      else
+        thing.evaluate(context)
+      end
     end
   end
+  
+  class And
+    include Container
+    def evaluate(context=binding())
+      boolean_or_evaluate(left, context) && boolean_or_evaluate(right, context)
+    end 
+  end
+  
+  class Or
+    include Container
+    def evaluate(context=binding())
+      boolean_or_evaluate(left, context) || boolean_or_evaluate(right, context)
+    end 
+  end
+
 end
