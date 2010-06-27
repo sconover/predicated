@@ -1,20 +1,20 @@
 module Predicated
   class Binary
-    def to_s
-      "#{self.class.shorthand}(#{part_to_s(left)},#{part_to_s(right)})"
+    def inspect
+      "#{self.class.shorthand}(#{part_inspect(left)},#{part_inspect(right)})"
     end
     
-    def inspect(indent="")
-      indent + to_s
+    def to_s(indent="")
+      indent + inspect
     end
     
     private
-    def part_to_s(thing)
-      part_to_str(thing) {|thing| thing.to_s}
+    def part_inspect(thing)
+      part_to_str(thing) {|thing| thing.inspect}
     end
     
-    def part_inspect(thing, indent="")
-      part_to_str(thing, indent) {|thing| thing.inspect(indent)}
+    def part_to_s(thing, indent="")
+      part_to_str(thing, indent) {|thing| thing.to_s(indent)}
     end
     
     def part_to_str(thing, indent="")
@@ -30,21 +30,21 @@ module Predicated
     end
   end
   
-  module ContainerInspect
-    def inspect(indent="")
+  module ContainerToString
+    def to_s(indent="")
       next_indent = indent + " " + " "
       
-      inspect_str = "#{indent}#{self.class.shorthand}(\n"
-      inspect_str << "#{part_inspect(left, next_indent)},\n"
-      inspect_str << "#{part_inspect(right, next_indent)}\n"
-      inspect_str << "#{indent})"
-      inspect_str << "\n" if indent == ""
+      str = "#{indent}#{self.class.shorthand}(\n"
+      str << "#{part_to_s(left, next_indent)},\n"
+      str << "#{part_to_s(right, next_indent)}\n"
+      str << "#{indent})"
+      str << "\n" if indent == ""
       
-      inspect_str
+      str
     end
   end
   
-  class And; include ContainerInspect end
-  class Or; include ContainerInspect end
+  class And; include ContainerToString end
+  class Or; include ContainerToString end
   
 end

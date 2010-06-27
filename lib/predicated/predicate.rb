@@ -9,13 +9,10 @@ module Predicated
   end
   
   class Binary
-	  
-	
-    def initialize(left, right)
+	  def initialize(left, right)
       @left = left
       @right = right
     end
-		
 		
 		module FlipThroughMe
 			def each(&block)
