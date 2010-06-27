@@ -2,7 +2,7 @@ require "spec/spec_helper"
 
 require "predicated/evaluate"
 
-apropos "evaluating predicates" do
+apropos "evaluate a predicate as boolean logic in ruby.  change the context by providing and optional binding." do
   include Predicated
   
   apropos "proving out basic operations" do
