@@ -15,19 +15,16 @@ module Predicated
     end
     
     module FlipThroughMe
-      def each(&block)
-        yield(self)
-        enumerate_side(@left, &block)
-        enumerate_side(@right, &block)
+      def each(ancestors=[], &block)
+        yield([self, ancestors])
+        ancestors_including_me = ancestors.dup + [self]
+        enumerate_side(@left, ancestors_including_me, &block)
+        enumerate_side(@right, ancestors_including_me, &block)
       end
       
       private 
-      def enumerate_side(thing)
-        if thing.is_a?(Enumerable)
-          thing.each { |item| yield(item) }
-        else
-          yield(thing)
-        end
+      def enumerate_side(thing, ancestors)
+        thing.each(ancestors) { |item| yield(item) } if thing.is_a?(Enumerable)
       end
     end
     include FlipThroughMe

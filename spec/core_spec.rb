@@ -21,29 +21,25 @@ apropos "prove value equality" do
 end
 
 
-apropos "you can flip through the predicate tree, like any enumerable" do
+apropos "you can flip through the predicate tree, like any enumerable.  a list of ancestors of each node are provided" do
   include Predicated
   
   test "simple" do
-    assert { Predicate { Eq(1, 2) }.to_a == [Predicate { Eq(1, 2) }, 1, 2] }
+    assert { Predicate { Eq(1, 2) }.to_a == [[Predicate { Eq(1, 2) }, []]] }
   end
     
   test "complex" do
-    assert { Predicate { And(Eq(1, 2), Or(Eq(3, 4), Eq(5, 6))) }.to_a == 
-             [
-              Predicate { And(Eq(1, 2), Or(Eq(3, 4), Eq(5, 6))) },
-              Predicate { Eq(1, 2) },
-              1,
-              2,
-              Predicate { Or(Eq(3, 4), Eq(5, 6)) },
-              Predicate { Eq(3, 4) },
-              3,
-              4,
-              Predicate { Eq(5, 6) },
-              5,
-              6
-             ] 
-           }
+    the_top = Predicate { And(Eq(1, 2), Or(Eq(3, 4), Eq(5, 6))) }
+    the_or = Predicate { Or(Eq(3, 4), Eq(5, 6)) }
+    assert { the_top.to_a == 
+       [
+        [the_top, []],
+        [Predicate { Eq(1, 2) }, [the_top]],
+        [Predicate { Or(Eq(3, 4), Eq(5, 6)) }, [the_top]],
+        [Predicate { Eq(3, 4) }, [the_top, the_or]],
+        [Predicate { Eq(5, 6) }, [the_top, the_or]]
+       ] 
+     }
   end
 
 end
