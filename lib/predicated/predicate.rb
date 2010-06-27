@@ -15,13 +15,11 @@ module Predicated
     end
     
     private
-    
     def left; @left end
     def right; @right end
   end
   
-  class Operation < Binary
-  end
+  class Operation < Binary; end
   
   module Predicate
     [[:And, :And, Class.new(Binary)],
@@ -32,6 +30,12 @@ module Predicated
      [:LessThanOrEqualTo, :Lte, Class.new(Operation)],
      [:GreaterThanOrEqualTo, :Gte, Class.new(Operation)]].each do |operation_class_name, shorthand, class_object|
        Predicated.const_set(operation_class_name, class_object)
+       class_object.instance_variable_set("@shorthand".to_sym, shorthand)
+       class_object.class_eval do
+         def self.shorthand
+           @shorthand
+         end
+       end
        module_eval(%{
          def #{shorthand}(left, right)
            ::Predicated::#{operation_class_name}.new(left, right)
@@ -40,3 +44,5 @@ module Predicated
      end
   end
 end
+
+require "predicated/print"

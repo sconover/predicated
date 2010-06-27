@@ -1,8 +1,6 @@
 require "spec/spec_helper"
 
-require "predicated/predicate"
 require "predicated/evaluate"
-
 
 apropos "evaluating predicates" do
   include Predicated
@@ -36,7 +34,6 @@ apropos "evaluating predicates" do
       assert { Predicate { Gte(2, 2) }.evaluate }
       assert { Predicate { Gte(3, 2) }.evaluate }
     end
-
   end
 
   apropos "binding / context" do
@@ -93,7 +90,7 @@ apropos "evaluating predicates" do
     class Color
       attr_reader :name
       def initialize(name)
-        @name
+        @name = name
       end
     
       def ==(other)

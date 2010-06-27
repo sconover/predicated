@@ -1,3 +1,5 @@
+require "predicated/predicate"
+
 module Predicated
   class Operation
     def evaluate(context=binding())
