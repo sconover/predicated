@@ -62,7 +62,7 @@ module Predicated
     
     base_selector_enumerable = SelectorEnumerable( 
       (CLASS_INFO.collect{|class_sym, sh, class_obj|class_obj} + [Binary, Operation]).
-        inject({}) do |h, class_obj|
+        inject({:all => proc{|predicate, enumerable|true}}) do |h, class_obj|
           h[class_obj] = proc{|predicate, enumerable|predicate.is_a?(class_obj)}
           h
         end 

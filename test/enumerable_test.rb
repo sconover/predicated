@@ -36,6 +36,8 @@ apropos "there are convenient selectors defined for getting things out of a pred
     root = Predicate { And(Eq(1, 2), Or(Eq(3, 4), Eq(5, 6))) }
     the_or = Predicate { Or(Eq(3, 4), Eq(5, 6)) }
 
+    assert{ root.select(:all).predicates == [root, Equal.new(1, 2), the_or, Equal.new(3, 4), Equal.new(5, 6)] }
+    
     assert{ root.select(And).predicates == [root] }
     assert{ root.select(Or).predicates == [the_or] }
     assert{ root.select(Equal).predicates == [Equal.new(1, 2), Equal.new(3, 4), Equal.new(5, 6)] }
