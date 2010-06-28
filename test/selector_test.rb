@@ -6,7 +6,7 @@ include Predicated::Selector
 apropos "part one: selectors on an array (simple enumerable).  proving them out more generally." do
   
   test %{selection basics.  
-         btw people often remark that this kind of thing is jQuery-like.
+         People often remark that this kind of thing is jQuery-like.
          I keep thinking I got it from Eric Evans.} do
     arr = [1,2,"c",4,"e",6]
     arr.extend SelectorEnumerable(
@@ -15,7 +15,7 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
       :less_than_3 => proc{|item|item < 3} 
     )
     
-    assert{ arr.select(:strings) == ["c", "e"] }
+    assert{ arr.select(:strings) == ["c","e"] }
     assert{ arr.select(:numbers) == [1,2,4,6] }
     assert{ arr.select(:numbers).select(:less_than_3) == [1,2] }
     
@@ -26,7 +26,7 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
     end
     
     #normal select still works
-    assert{ arr.select{|item|item.is_a?(String)} == ["c", "e"] }
+    assert{ arr.select{|item|item.is_a?(String)} == ["c","e"] }
   end
 
   test "...selector name can be any object" do
@@ -37,7 +37,7 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
       :less_than_3 => proc{|item|item < 3} 
     )
     
-    assert{ arr.select(String) == ["c", "e"] }
+    assert{ arr.select(String) == ["c","e"] }
     assert{ arr.select(Numeric) == [1,2,4,6] }
     assert{ arr.select(Numeric).select(:less_than_3) == [1,2] }
   end
@@ -47,12 +47,11 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
     arr.extend SelectorEnumerable(:strings => proc{|item|item.is_a?(String)}) 
     arr.extend SelectorEnumerable(:numbers => proc{|item|item.is_a?(Numeric)}) 
     
-    assert{ arr.select(:strings) == ["c", "e"] }
+    assert{ arr.select(:strings) == ["c","e"] }
     assert{ arr.select(:numbers) == [1,2,4,6] }
   end
     
-  test "works as an include to a class" do
-    
+  test "works as an include" do    
     class MyArray < Array
       include SelectorEnumerable(:strings => proc{|item|item.is_a?(String)}) 
       include SelectorEnumerable(:numbers => proc{|item|item.is_a?(Numeric)}) 
@@ -60,7 +59,7 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
     arr = MyArray.new 
     arr.replace([1,2,"c",4,"e",6])
 
-    assert{ arr.select(:strings) == ["c", "e"] }
+    assert{ arr.select(:strings) == ["c","e"] }
     assert{ arr.select(:numbers) == [1,2,4,6] }
   end
     
@@ -74,10 +73,10 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
       :numbers => proc{|item|item.is_a?(Numeric)}, 
       :less_than_3 => proc{|item|item < 3} 
     )
-    assert{ arr.select(:strings) == ["c", "e"] }
+    assert{ arr.select(:strings) == ["c","e"] }
     
     arr << "zzz"
     
-    assert{ arr.select(:strings) == ["c", "e"] }
+    assert{ arr.select(:strings) == ["c","e"] }
   end
 end
