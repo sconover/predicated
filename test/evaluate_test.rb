@@ -1,10 +1,10 @@
 require "test/test_helper"
 
 require "predicated/evaluate"
+include Predicated
 
 apropos "evaluate a predicate as boolean logic in ruby.  change the context by providing and optional binding." do
-  include Predicated
-  
+
   apropos "proving out basic operations" do
     test "equals" do
       assert { Predicate { Eq(1, 1) }.evaluate }

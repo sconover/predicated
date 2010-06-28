@@ -1,9 +1,9 @@
 require "test/test_helper"
 
 require "predicated/predicate"
+include Predicated
 
 apropos "prove value equality" do
-  include Predicated
   
   test "simple" do
     assert { Predicate { Eq(1, 1) } == Predicate { Eq(1, 1) } }
