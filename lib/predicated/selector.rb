@@ -23,7 +23,8 @@ module Predicated
           @key_to_selecting_proc || self.class.instance_variable_get("@key_to_selecting_proc".to_sym)
         end
         
-        def select(key=nil, &block)
+        def select(*keys, &block)
+          key = keys.shift if keys.length>=1
           result = 
             if key
               selecting_proc = key_to_selecting_proc[key]
@@ -34,7 +35,7 @@ module Predicated
             end
           #ugh
           result.extend(Predicated::Selector.SelectorEnumerable(key_to_selecting_proc))
-          result
+          keys.length>=1 ? result.select(*keys, &block) : result
         end
     
         private

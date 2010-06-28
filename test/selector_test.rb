@@ -42,6 +42,18 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
     assert{ arr.select(Numeric).select(:less_than_3) == [1,2] }
   end
     
+  test "chaining.  also works using varargs" do
+    arr = [1,2,"c",4,"e",6]
+    arr.extend SelectorEnumerable(
+      String => proc{|item|item.is_a?(String)}, 
+      Numeric => proc{|item|item.is_a?(Numeric)}, 
+      :less_than_3 => proc{|item|item < 3} 
+    )
+    
+    assert{ arr.select(Numeric).select(:less_than_3) == [1,2] }
+    assert{ arr.select(Numeric, :less_than_3) == [1,2] }
+  end
+    
   test "extending twice is additive (not destructive)" do
     arr = [1,2,"c",4,"e",6]
     arr.extend SelectorEnumerable(:strings => proc{|item|item.is_a?(String)}) 
