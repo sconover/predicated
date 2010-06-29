@@ -60,6 +60,7 @@ module Predicated
       [:GreaterThanOrEqualTo, :Gte, Class.new(Operation)]
     ]
     
+    #not great
     base_selector_enumerable = SelectorEnumerable( 
       (CLASS_INFO.collect{|class_sym, sh, class_obj|class_obj} + [Binary, Operation]).
         inject({:all => proc{|predicate, enumerable|true}}) do |h, class_obj|
