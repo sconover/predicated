@@ -1,7 +1,7 @@
 require "test/test_helper"
 
 require "predicated/predicate"
-require "predicated/constraint"
+require "predicated/constrain"
 include Predicated
 
 apropos %{constraints are rules about the content and structure of predicates.
