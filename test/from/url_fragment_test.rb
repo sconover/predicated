@@ -18,5 +18,10 @@ apropos "parse url fragments and convert them into predicates" do
       assert { @converter.convert("a<=1") == Predicate{ Lte("a","1") } }
       assert { @converter.convert("a>=1") == Predicate{ Gte("a","1") } }
     end
+
+    test "simple and + or" do
+      assert { @converter.convert("a=1&b=2") == Predicate{ And(Eq("a","1"),Eq("b","2")) } }
+      assert { @converter.convert("a=1|b=2") == Predicate{ Or(Eq("a","1"),Eq("b","2")) } }
+    end
   end
 end

@@ -10,8 +10,16 @@ grammar TreetopUrlFragment
 
   include Predicated::From::TreetopUrlFragment
   
+  rule or
+   	( and "|" or <OrNode>)  / and
+  end 
+
+  rule and
+    ( operation "&" and <AndNode> ) / operation
+  end
+
   rule operation
-    unquoted_string sign unquoted_string <Operation>
+    unquoted_string sign unquoted_string <OperationNode>
   end
 
   rule unquoted_string
@@ -25,7 +33,7 @@ end
 
 })
     
-      class Operation < Treetop::Runtime::SyntaxNode
+      class OperationNode < Treetop::Runtime::SyntaxNode
         def left_text; elements[0].text_value end
         def sign_text; elements[1].text_value end
         def right_text; elements[2].text_value end      
@@ -41,7 +49,27 @@ end
         def to_predicate
           SIGN_TO_PREDICATE_CLASS[sign_text].new(left_text, right_text)
         end
+      end      
+      
+      class AndNode < Treetop::Runtime::SyntaxNode
+        def left; elements[0] end
+        def right; elements[2] end      
+        
+        def to_predicate
+          And.new(left.to_predicate, right.to_predicate)
+        end
       end
+            
+      class OrNode < Treetop::Runtime::SyntaxNode
+        def left; elements[0] end
+        def right; elements[2] end      
+        
+        def to_predicate
+          Or.new(left.to_predicate, right.to_predicate)
+        end
+      end
+      
+      
     end
   end
 end

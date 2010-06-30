@@ -11,12 +11,12 @@ apropos "parse a url fragment, the result is a parse tree" do
     @parser = TreetopUrlFragmentParser.new
   end
 
-  apropos "basic operations" do
+  apropos "simple operations" do
     
-    test "simple operations" do
+    test "parse" do
       tree = @parser.parse("a=1")
       
-      assert{ tree.is_a?(Predicated::From::TreetopUrlFragment::Operation) }      
+      assert{ tree.is_a?(Predicated::From::TreetopUrlFragment::OperationNode) }      
       assert{ [tree.left_text, tree.sign_text, tree.right_text] == ["a", "=", "1"] }
       
       tree = @parser.parse("a>1")
@@ -32,17 +32,43 @@ apropos "parse a url fragment, the result is a parse tree" do
       assert{ [tree.left_text, tree.sign_text, tree.right_text] == ["a", "<=", "1"] }
     end
     
-  end
-
-  apropos "to predicate" do
-    
-    test "simple operations" do
+    test "...to predicate" do
       assert{ @parser.parse("a=1").to_predicate == Predicate{Eq("a", "1")} }
       assert{ @parser.parse("a>1").to_predicate == Predicate{Gt("a", "1")} }
       assert{ @parser.parse("a<1").to_predicate == Predicate{Lt("a", "1")} }
       assert{ @parser.parse("a>=1").to_predicate == Predicate{Gte("a", "1")} }
       assert{ @parser.parse("a<=1").to_predicate == Predicate{Lte("a", "1")} }
     end
+
+  end
+
+  apropos "simple and" do
+    test "parse" do
+      tree = @parser.parse("a=1&b=2")
+
+      assert{ tree.is_a?(Predicated::From::TreetopUrlFragment::AndNode) }      
+      assert{ [[tree.left.left_text, tree.left.sign_text, tree.left.right_text],
+               [tree.right.left_text, tree.right.sign_text, tree.right.right_text]] == 
+               [["a", "=", "1"], ["b", "=", "2"]] }      
+    end
     
+    test "...to predicate" do
+      assert{ @parser.parse("a=1&b=2").to_predicate == Predicate{ And( Eq("a", "1"),Eq("b", "2") ) } }
+    end
+  end
+
+  apropos "simple or" do
+    test "parse" do
+      tree = @parser.parse("a=1|b=2")
+
+      assert{ tree.is_a?(Predicated::From::TreetopUrlFragment::OrNode) }      
+      assert{ [[tree.left.left_text, tree.left.sign_text, tree.left.right_text],
+               [tree.right.left_text, tree.right.sign_text, tree.right.right_text]] == 
+               [["a", "=", "1"], ["b", "=", "2"]] }      
+    end
+    
+    test "...to predicate" do
+      assert{ @parser.parse("a=1|b=2").to_predicate == Predicate{ Or( Eq("a", "1"),Eq("b", "2") ) } }
+    end
   end
 end
