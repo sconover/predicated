@@ -15,11 +15,20 @@ grammar TreetopUrlFragment
   end 
 
   rule and
-    ( operation "&" and <AndNode> ) / operation
+    ( leaf "&" and <AndNode> ) / leaf
   end
 
   rule operation
     unquoted_string sign unquoted_string <OperationNode>
+  end
+  
+  rule parens
+    "(" or ")" <ParensNode>
+  end
+
+
+  rule leaf
+    operation / parens
   end
 
   rule unquoted_string
@@ -66,6 +75,14 @@ end
         
         def to_predicate
           Or.new(left.to_predicate, right.to_predicate)
+        end
+      end
+      
+      class ParensNode < Treetop::Runtime::SyntaxNode
+        def inner; elements[1] end
+        
+        def to_predicate
+          inner.to_predicate
         end
       end
       

@@ -27,7 +27,15 @@ apropos "parse url fragments and convert them into predicates" do
     test "complex and + or" do
       assert { @converter.convert("a=1&b=2|c=3") == 
         Predicate{ Or( And(Eq("a","1"),Eq("b","2")), Eq("c","3") ) } }
-
     end
+    
+    test "parens change precedence" do
+      assert { @converter.convert("a=1|b=2&c=3") == 
+        Predicate{ Or( Eq("a","1"), And(Eq("b","2"),Eq("c","3")) ) } }
+
+      assert { @converter.convert("(a=1|b=2)&c=3") == 
+        Predicate{ And( Or(Eq("a","1"),Eq("b","2")), Eq("c","3") ) } }
+    end
+
   end
 end

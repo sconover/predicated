@@ -92,4 +92,26 @@ apropos "parse a url fragment, the result is a parse tree" do
     end
   end
 
+  apropos "parens (force higher precedence)" do
+    test "no effect" do
+      str = "(a=1|b=2)|c=3"
+      assert{ @parser.parse(str).to_predicate == 
+        Predicate{ Or( Or(Eq("a", "1"),Eq("b", "2")), Eq("c", "3") ) } }
+      
+      str = "((a=1|b=2))|c=3"
+      assert{ @parser.parse(str).to_predicate == 
+        Predicate{ Or( Or(Eq("a", "1"),Eq("b", "2")), Eq("c", "3") ) } }
+    end
+
+    test "force precedence" do
+      #before
+      assert{ @parser.parse("a=1|b=2&c=3").to_predicate == 
+        Predicate{ Or( Eq("a", "1"), And(Eq("b", "2"),Eq("c", "3")) ) } }
+      
+      #after
+      assert{ @parser.parse("(a=1|b=2)&c=3").to_predicate == 
+        Predicate{ And( Or(Eq("a", "1"),Eq("b", "2")), Eq("c", "3") ) } }
+    end
+  end
+
 end
