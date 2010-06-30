@@ -71,4 +71,25 @@ apropos "parse a url fragment, the result is a parse tree" do
       assert{ @parser.parse("a=1|b=2").to_predicate == Predicate{ Or( Eq("a", "1"),Eq("b", "2") ) } }
     end
   end
+  
+  apropos "complex and/or" do
+    test "many or's" do
+      assert{ @parser.parse("a=1|b=2|c=3").to_predicate == 
+        Predicate{ Or( Eq("a", "1"), Or(Eq("b", "2"),Eq("c", "3")) ) } }
+    end
+
+    test "many and's" do
+      assert{ @parser.parse("a=1&b=2&c=3").to_predicate == 
+        Predicate{ And( Eq("a", "1"), And(Eq("b", "2"),Eq("c", "3")) ) } }
+    end
+
+    test "mixed and/or" do
+      assert{ @parser.parse("a=1|b=2&c=3").to_predicate == 
+        Predicate{ Or( Eq("a", "1"), And(Eq("b", "2"),Eq("c", "3")) ) } }
+
+      assert{ @parser.parse("a=1&b=2|c=3").to_predicate == 
+        Predicate{ Or( And(Eq("a", "1"),Eq("b", "2")), Eq("c", "3") ) } }
+    end
+  end
+
 end
