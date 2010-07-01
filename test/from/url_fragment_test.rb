@@ -1,6 +1,5 @@
 require "test/test_helper"
 
-
 require "predicated/from/url_fragment"
 include Predicated
 
