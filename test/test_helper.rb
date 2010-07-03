@@ -2,8 +2,11 @@ dir = File.dirname(__FILE__)
 $LOAD_PATH.unshift "#{dir}/../lib"
 require "rubygems"
 require "minitest/spec"
+require "pp"
+
 require "ruby2ruby"
-require 'ruby_parser'
+require "ruby_parser"
+
 
 # This is a snippet from my ~/.irbrc
 # You need to gem install ruby2ruby ParseTree
@@ -93,13 +96,18 @@ module Kernel
   alias_method :apropos, :describe
   
   def xapropos(str)
-    puts "not running 'apropos \"#{str}\"'"
+    puts "x'd out 'apropos \"#{str}\"'"
   end
 end
 
 class MiniTest::Spec
   class << self
     alias_method :test, :it
+    
+    def xtest(str)
+      puts "x'd out 'test \"#{str}\"'"
+    end
+
   end
 end
 
