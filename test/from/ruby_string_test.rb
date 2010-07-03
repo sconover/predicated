@@ -27,14 +27,29 @@ apropos "parse a ruby predicate string" do
       assert { Predicate.from_ruby_string("1==1 || 2==2") == Predicate{ Or(Eq(1,1),Eq(2,2)) } }
     end
 
+    class Color
+      attr_reader :name
+      def initialize(name)
+        @name = name
+      end
+    
+      def ==(other)
+        other.is_a?(Color) && @name == other.name
+      end
+    end
+
     test "substitute in from the binding" do
       a = 1
       b = "1"
       c = "c"
+      d = Color.new("purple")
       
       assert { Predicate.from_ruby_string("a==1", binding()) == Predicate{ Eq(1,1) } }
       assert { Predicate.from_ruby_string("b==1", binding()) == Predicate{ Eq("1",1) } }
       assert { Predicate.from_ruby_string("c==b", binding()) == Predicate{ Eq("c","1") } }
+      assert { Predicate.from_ruby_string("d==d", binding()) == Predicate{ Eq(Color.new("purple"),
+                                                                              Color.new("purple")) } }
+      assert { Predicate.from_ruby_string("d==d", binding()).left === d }
       
       assert { Predicate.from_ruby_string("a==b && b==c", binding()) == 
                 Predicate{ And(Eq(1,"1"),Eq("1","c")) } }
