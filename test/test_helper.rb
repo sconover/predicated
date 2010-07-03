@@ -4,8 +4,8 @@ require "rubygems"
 require "minitest/spec"
 require "pp"
 
-require "ruby2ruby"
-require "ruby_parser"
+# require "ruby2ruby"
+# require "ruby_parser"
 
 
 # This is a snippet from my ~/.irbrc
@@ -21,10 +21,10 @@ require "ruby_parser"
 #   end
 # end
 
-require 'ruby2ruby'
-require 'sexp_processor'
-require 'unified_ruby'
-require 'parse_tree'
+# require 'ruby2ruby'
+# require 'sexp_processor'
+# require 'unified_ruby'
+# require 'parse_tree'
 
 # # Monkey-patch to have Ruby2Ruby#translate with r2r >= 1.2.3, from
 # # http://seattlerb.rubyforge.org/svn/ruby2ruby/1.2.2/lib/ruby2ruby.rb

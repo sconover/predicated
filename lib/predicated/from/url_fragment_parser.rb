@@ -1,5 +1,6 @@
-require "treetop"
 require "predicated/predicate"
+
+require "treetop"
 
 module Predicated
   module From

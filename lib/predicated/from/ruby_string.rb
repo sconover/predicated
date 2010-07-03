@@ -1,5 +1,6 @@
-require 'ruby_parser'
 require "predicated/predicate"
+
+require 'ruby_parser'
 
 module Predicated
   module Predicate
