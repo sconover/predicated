@@ -36,31 +36,6 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
     end
   end
 
-  apropos "binding / context" do
-    test "if we pass in a binding, that is the context for the evaluation" do
-      x = 1
-      assert { Predicate { Eq(x, 1) }.evaluate(binding()) }
-      deny   { Predicate { Eq(x, 2) }.evaluate(binding()) }
-    
-      a = "1"
-      assert { Predicate { Eq(a, "1") }.evaluate(binding()) }
-      deny   { Predicate { Eq(a, "a") }.evaluate(binding()) }
-      deny   { Predicate { Eq(a, 1) }.evaluate(binding()) }
-      
-      b = "b"
-      assert { Predicate { Eq(b, "b") }.evaluate(binding()) }
-      assert { Predicate { Eq(b, b) }.evaluate(binding()) }
-      
-      deny   { Predicate { Eq(a, b) }.evaluate(binding()) }
-      b = "1"
-      assert { Predicate { Eq(a, b) }.evaluate(binding()) }
-      
-      c = "true"
-      assert { Predicate { Eq("true", c) }.evaluate(binding()) }
-      deny   { Predicate { Eq(true, c) }.evaluate(binding()) }
-    end
-  end
-
   apropos "comparing values of different data types" do
     test "strings" do
       assert { Predicate { Eq("1", "1") }.evaluate }
@@ -94,7 +69,7 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
       end
     
       def ==(other)
-        @name == other.name
+        other.is_a?(Color) && @name == other.name
       end
     end
 

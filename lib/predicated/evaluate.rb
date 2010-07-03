@@ -2,22 +2,8 @@ require "predicated/predicate"
 
 module Predicated
   class Operation
-    def evaluate(context=binding())
-      left_processed = format_value(left, context)
-      right_processed = format_value(right, context)
-      code = "#{left_processed} #{sign} #{right_processed}"
-      eval(code, context)
-    end
-    
-    private 
-    def format_value(thing, context)
-      evaled = eval("return #{thing}", context)
-      
-      if evaled.is_a?(String) && evaled == thing
-        %{"#{thing}"}
-      else
-        thing
-      end
+    def evaluate
+      left.send(sign.to_sym, right)
     end
   end
   
@@ -29,28 +15,28 @@ module Predicated
 
   module Container
     private 
-    def boolean_or_evaluate(thing, context)
+    def boolean_or_evaluate(thing)
       if thing.is_a?(FalseClass)
         false
       elsif thing.is_a?(TrueClass)
         true
       else
-        thing.evaluate(context)
+        thing.evaluate
       end
     end
   end
   
   class And
     include Container
-    def evaluate(context=binding())
-      boolean_or_evaluate(left, context) && boolean_or_evaluate(right, context)
+    def evaluate
+      boolean_or_evaluate(left) && boolean_or_evaluate(right)
     end 
   end
   
   class Or
     include Container
     def evaluate(context=binding())
-      boolean_or_evaluate(left, context) || boolean_or_evaluate(right, context)
+      boolean_or_evaluate(left) || boolean_or_evaluate(right)
     end 
   end
 
