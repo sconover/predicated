@@ -1,6 +1,4 @@
-require "test/test_helper"
-require "wrong"
-require "wrong/minitest"
+require "test/test_helper_with_wrong"
 
 require "predicated/evaluate"
 include Predicated
@@ -121,6 +119,14 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
       deny { Predicate { Call("abc", :include?, "ZZ") }.evaluate }
     end
 
+    test "nil call.  call defaults to no args if none are specified" do
+      assert { Predicate { Call(nil, :nil?, []) }.evaluate }
+      deny { Predicate { Call("abc", :nil?, []) }.evaluate }
+
+      assert { Predicate { Call(nil, :nil?) }.evaluate }
+      deny { Predicate { Call("abc", :nil?) }.evaluate }
+    end
+
     test "inspect" do
       assert{ Call.new("abc", :include?, "bc").inspect == "Call('abc'.include?('bc'))" }
     end
@@ -131,6 +137,8 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
       deny { Call.new("abc", :zzz, "bc") == Call.new("abc", :include?, "bc") }
       deny { Call.new("abc", :include?, "ZZZ") == Call.new("abc", :include?, "bc") }
     end
+    
+
   end  
   
 end

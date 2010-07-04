@@ -1,6 +1,4 @@
-require "test/test_helper"
-require "wrong"
-require "wrong/minitest"
+require "test/test_helper_with_wrong"
 
 unless RUBY_VERSION=="1.8.6"
   

@@ -31,13 +31,17 @@ module Predicated
     def self.shorthand
       :Call
     end
+
+    def initialize(left, method_sym, right=[])
+      super
+    end    
     
     def inspect
       "Call(#{self.send(:part_inspect,left)}.#{method_sym.to_s}(#{self.send(:part_inspect, right)}))"
     end
   end
   Predicate.module_eval(%{
-    def Call(left_object, method_sym, right_args)
+    def Call(left_object, method_sym, right_args=[])
       ::Predicated::Call.new(left_object, method_sym, right_args)
     end
   })

@@ -1,6 +1,4 @@
-require "test/test_helper"
-require "wrong"
-require "wrong/minitest"
+require "test/test_helper_with_wrong"
 
 require "predicated/selector"
 include Predicated::Selector
@@ -22,8 +20,8 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
     assert{ @arr.select(:numbers) == [1,2,4,6] }
     assert{ @arr.select(:numbers).select(:less_than_3) == [1,2] }
     
-    assert_raise /ArgumentError/ do
-      @arr.select(:less_than_3) 
+    assert do
+      catch_raise{@arr.select(:less_than_3)}.is_a?(ArgumentError)
       #because strings don't respond to <
       #...there's no substitute for knowing what you're doing.
     end
