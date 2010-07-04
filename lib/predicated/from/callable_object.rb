@@ -7,7 +7,7 @@ require 'parse_tree'
 module Predicated
   module Predicate
 
-                                  #you do what you have to I guess.
+                                  #hrm
     def self.from_callable_object(context_or_callable_object=nil, context=nil, &block)
       callable_object = nil
       
@@ -48,6 +48,22 @@ module Predicated
         sexp = unifier.process(sexp)
         self.new.process(sexp)
       end
+      
+      def process_hash(exp)
+        result = []
+        until exp.empty?
+          lhs = process(exp.shift)
+          rhs = exp.shift
+          t = rhs.first
+          rhs = process rhs
+          rhs = "(#{rhs})" unless [:lit, :str].include? t # TODO: verify better!
+
+          result << "#{lhs} => #{rhs}"
+        end
+
+        return "{ #{result.join(', ')} }"
+      end
+
     end
     
   end

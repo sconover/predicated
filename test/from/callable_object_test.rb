@@ -24,6 +24,9 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
     test "complex types" do
       assert { Predicate.from_callable_object{Color.new("red")==Color.new("blue")} == 
         Predicate{ Eq(Color.new("red"),Color.new("blue")) } }
+
+      assert { Predicate.from_callable_object{ {1=>2} == {"a"=>"b"} } == 
+        Predicate{ Eq({1=>2},{"a"=>"b"}) } }
     end                                      
                                              
     test "simple and + or" do                
