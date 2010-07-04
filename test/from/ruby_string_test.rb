@@ -68,6 +68,11 @@ apropos "parse a ruby predicate string" do
       assert { Predicate.from_ruby_string("(1==1 || 2==2) && 3==3") == 
         Predicate{ And( Or(Eq(1,1),Eq(2,2)), Eq(3,3) ) } }
     end
+    
+    test "only pay attention to the final line" do
+      #might hate myself one day for this.  but what else does it make sense to do?
+      assert { Predicate.from_ruby_string("z=2\nb=5\n1==1") == Predicate{ Eq(1,1) } }
+    end
 
   end
   

@@ -1,69 +1,13 @@
 dir = File.dirname(__FILE__)
 $LOAD_PATH.unshift "#{dir}/../lib"
+$LOAD_PATH.unshift "../wrong/lib"
 require "rubygems"
 require "minitest/spec"
 require "pp"
-
-# require "ruby2ruby"
-# require "ruby_parser"
-
-
-# This is a snippet from my ~/.irbrc
-# You need to gem install ruby2ruby ParseTree
-
-# This is what you do with it
-#
-# > class Bar; define_method(:foo) { 'ou hai' }; end
-# > puts Bar.to_ruby
-# class Bar < Object
-#   def foo
-#     "ou hai"
-#   end
-# end
-
-# require 'ruby2ruby'
-# require 'sexp_processor'
-# require 'unified_ruby'
-# require 'parse_tree'
-
-# # Monkey-patch to have Ruby2Ruby#translate with r2r >= 1.2.3, from
-# # http://seattlerb.rubyforge.org/svn/ruby2ruby/1.2.2/lib/ruby2ruby.rb
-# class Ruby2Ruby < SexpProcessor
-#   def self.translate(klass_or_str, method = nil)
-#     sexp = ParseTree.translate(klass_or_str, method)
-#     unifier = Unifier.new
-#     unifier.processors.each do |p|
-#       p.unsupported.delete :cfunc # HACK
-#     end
-#     sexp = unifier.process(sexp)
-#     self.new.process(sexp)
-#   end
-# end
-# 
-# # The Beef
-# class Module
-#   def to_ruby
-#     Ruby2Ruby.translate(self)
-#   end
-# end
-
-  #   c = Class.new
-  #   c.class_eval do
-  #     define_method :serializable, &block
-  #   end
-  #   s = Ruby2Ruby.translate(c, :serializable)    
-  # p s
-  # p RubyParser.new.process(s)
+require "wrong"
+require "wrong/minitest"
 
 class MiniTest::Unit::TestCase
-  
-  def assert(&block)
-    yield || _test_failure
-  end
-  
-  def deny
-    yield && _test_failure
-  end
   
   def assert_raise(exception_info_regex)
     begin

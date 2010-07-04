@@ -21,6 +21,11 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
       assert { Predicate.from_callable_object{'yyy'=='zzz'} == Predicate{ Eq("yyy","zzz") } }
     end                                      
                                              
+    test "complex types" do
+      assert { Predicate.from_callable_object{Color.new("red")==Color.new("blue")} == 
+        Predicate{ Eq(Color.new("red"),Color.new("blue")) } }
+    end                                      
+                                             
     test "simple and + or" do                
       assert { Predicate.from_callable_object{1==1 && 2==2} == Predicate{ And(Eq(1,1),Eq(2,2)) } }
       assert { Predicate.from_callable_object{1==1 and 2==2} == Predicate{ And(Eq(1,1),Eq(2,2)) } }
@@ -49,7 +54,7 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
       assert { Predicate.from_callable_object(binding()){b==1} == Predicate{ Eq("1",1) } }
       assert { Predicate.from_callable_object(binding()){c==b} == Predicate{ Eq("c","1") } }
       assert { Predicate.from_callable_object(binding()){d==d} == Predicate{ Eq(Color.new("purple"),
-                                                                                 Color.new("purple")) } }
+                                                                                Color.new("purple")) } }
       assert { Predicate.from_callable_object(binding()){d==d}.left === d }
                                              
       assert { Predicate.from_callable_object(binding()){a==b && b==c} == 

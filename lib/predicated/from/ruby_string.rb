@@ -5,8 +5,8 @@ require 'ruby_parser'
 module Predicated
   module Predicate
     def self.from_ruby_string(ruby_predicate_string, context=binding())
-      sexp = RubyParser.new.process(ruby_predicate_string).to_a
-      
+      last_line = ruby_predicate_string.strip.split("\n").last
+      sexp = RubyParser.new.process(last_line).to_a
       converter = SexpToPredicate.new(context)
       converter.convert(sexp)
     end
@@ -48,8 +48,7 @@ module Predicated
         first_element = sexp.first
         
         if first_element == :call
-          name = sexp[2].to_s #[:call, nil, :aaa, [:arglist]]
-          eval(name, @context)
+          do_call(sexp)
         elsif first_element == :arglist
           literal = sexp[1] #[:arglist, [:lit, 999]]          
           operation_part(literal)
@@ -61,6 +60,25 @@ module Predicated
         elsif first_element == :false
           false #[:false]
         else
+          raise DontKnowWhatToDoWithThisSexpError.new(sexp)
+        end
+      end
+      
+      def do_call(sexp)
+        second_element = sexp[1]
+        if second_element.nil?
+          name = sexp[2].to_s #[:call, nil, :aaa, [:arglist]]
+          eval(name, @context)
+        elsif second_element.is_a?(Array) && second_element[0]==:call
+          #[:call, [:call, [:const, :Color], :new, [:arglist, [:str, "red"]]]
+          do_call(second_element)
+        elsif second_element.is_a?(Array) && second_element[0]==:const
+          # [:call, [:const, :Color], :new, [:arglist, [:str, "red"]]
+          sym, subject, method, args = sexp
+          sym, subject_const = subject
+          sym, arg_list = args
+          Object.const_get(subject_const).send(method, arg_list[1]) #brittle
+        else 
           raise DontKnowWhatToDoWithThisSexpError.new(sexp)
         end
       end

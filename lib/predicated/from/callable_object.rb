@@ -8,15 +8,17 @@ module Predicated
   module Predicate
 
                                   #you do what you have to I guess.
-    def self.from_callable_object(context_or_callable_object=binding(), context=binding(), &block)
+    def self.from_callable_object(context_or_callable_object=nil, context=nil, &block)
       callable_object = nil
       
-      if context_or_callable_object.is_a?(Binding)
+      if context_or_callable_object.is_a?(Binding) || context_or_callable_object.nil?
         context = context_or_callable_object
         callable_object = block
       else
         callable_object = context_or_callable_object
       end
+      
+      context ||= callable_object.binding
       
       from_ruby_string(TranslateToRubyString.convert(callable_object), context)
     end
@@ -47,8 +49,6 @@ module Predicated
         self.new.process(sexp)
       end
     end
-
     
-
   end
 end
