@@ -1,4 +1,6 @@
 require "test/test_helper"
+require "wrong"
+require "wrong/minitest"
 
 require "predicated/to/sentence"
 include Predicated
@@ -27,6 +29,14 @@ apropos "convert a predicate to an english sentence" do
   
   test "complex types" do
     assert { Predicate{ Eq([1,2],{3=>4}) }.to_sentence == "'[1, 2]' is equal to '{3=>4}'" }
+  end
+  
+  test "calls - question mark methods" do
+    assert { Predicate{ Call("abc", :include?, "bc") }.to_sentence == 
+      "'abc' does include 'bc'" }
+
+    assert { Predicate{ Call("abc", :include?, "bc") }.to_negative_sentence == 
+      "'abc' does not include 'bc'" }
   end
   
   test "simple and + or" do

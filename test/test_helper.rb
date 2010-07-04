@@ -4,8 +4,9 @@ $LOAD_PATH.unshift "../wrong/lib"
 require "rubygems"
 require "minitest/spec"
 require "pp"
-require "wrong"
-require "wrong/minitest"
+
+#DO NOT REQUIRE WRONG IN HERE
+#The circularity between projects will cause certain tests to not work.
 
 class MiniTest::Unit::TestCase
   

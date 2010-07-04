@@ -1,4 +1,6 @@
 require "test/test_helper"
+require "wrong"
+require "wrong/minitest"
 
 require "predicated/from/url_fragment"
 include Predicated

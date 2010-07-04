@@ -1,4 +1,6 @@
 require "test/test_helper"
+require "wrong"
+require "wrong/minitest"
 
 apropos "test failures" do
 

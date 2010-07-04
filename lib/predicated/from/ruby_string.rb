@@ -1,4 +1,5 @@
 require "predicated/predicate"
+require "predicated/evaluate"
 
 require 'ruby_parser'
 require 'ruby2ruby'
@@ -28,11 +29,16 @@ module Predicated
       def convert(sexp)
         first_element = sexp.first
         if first_element == :call
-          sym, left, sign, right = sexp
-          SIGN_TO_PREDICATE_CLASS[sign].new(
-            eval(Ruby2Ruby.new.process(left), @context), 
-            eval(Ruby2Ruby.new.process(right), @context)
-          )
+          sym, left_sexp, method_sym, right_sexp = sexp
+          left = eval(Ruby2Ruby.new.process(left_sexp), @context)
+          right = eval(Ruby2Ruby.new.process(right_sexp), @context)
+
+          if operation_class=SIGN_TO_PREDICATE_CLASS[method_sym]
+            operation_class.new(left, right)
+          else
+            Call.new(left, method_sym, right)
+          end
+
         elsif first_element == :and
           sym, left, right = sexp
           And.new(convert(left), convert(right))

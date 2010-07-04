@@ -1,4 +1,6 @@
 require "test/test_helper"
+require "wrong"
+require "wrong/minitest"
 
 require "predicated/evaluate"
 include Predicated
@@ -110,6 +112,24 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
       assert { Predicate { Or(true, false) }.evaluate }
       assert { Predicate { Or(false, true) }.evaluate }
       deny   { Predicate { Or(false, false) }.evaluate }
+    end
+  end  
+  
+  apropos "evaluate adds a generic 'call' class.  that is, object.message(args)" do
+    test "evaluate simple calls" do
+      assert { Predicate { Call("abc", :include?, "bc") }.evaluate }
+      deny { Predicate { Call("abc", :include?, "ZZ") }.evaluate }
+    end
+
+    test "inspect" do
+      assert{ Call.new("abc", :include?, "bc").inspect == "Call('abc'.include?('bc'))" }
+    end
+    
+    test "call equality" do
+      assert { Call.new("abc", :include?, "bc") == Call.new("abc", :include?, "bc") }
+      deny { Call.new("ZZZ", :include?, "bc") == Call.new("abc", :include?, "bc") }
+      deny { Call.new("abc", :zzz, "bc") == Call.new("abc", :include?, "bc") }
+      deny { Call.new("abc", :include?, "ZZZ") == Call.new("abc", :include?, "bc") }
     end
   end  
   

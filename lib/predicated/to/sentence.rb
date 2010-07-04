@@ -1,4 +1,5 @@
 require "predicated/predicate"
+require "predicated/evaluate"
 
 module Predicated
   
@@ -26,19 +27,23 @@ module Predicated
     }
     
     def to_sentence
-      sentence("is")
+      sentence("")
     end
     
     def to_negative_sentence
-      sentence("is not")
+      sentence(" not")
     end
     
     private 
     
     def sentence(linking)
-      format_value(left) + " #{linking} #{CLASS_TO_PHRASE[self.class]} " + format_value(right)
+      format_value(left) + phrase(linking) + format_value(right)
     end
     
+    def phrase(linking)
+      " is#{linking} #{CLASS_TO_PHRASE[self.class]} "
+    end
+        
     def format_value(value)
       if value.is_a?(String)
         "'" + value.to_s + "'"
@@ -49,6 +54,13 @@ module Predicated
       else
         "'" + value.inspect + "'"
       end
+    end
+  end
+  
+  class Call < Operation
+    def phrase(linking)
+      method_str = method_sym.to_s.sub("?", "")
+      " does#{linking} #{method_str} "
     end
   end
   

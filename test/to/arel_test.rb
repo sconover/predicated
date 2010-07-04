@@ -1,4 +1,6 @@
 require "test/test_helper"
+require "wrong"
+require "wrong/minitest"
 
 unless RUBY_VERSION=="1.8.6"
   
