@@ -37,10 +37,10 @@ module Predicated
     private 
     
     def sentence(linking)
-      format_value(left) + phrase(linking) + format_value(right)
+      format_value(left) + verb_phrase(linking) + format_value(right)
     end
     
-    def phrase(linking)
+    def verb_phrase(linking)
       " is#{linking} #{CLASS_TO_PHRASE[self.class]} "
     end
         
@@ -58,7 +58,7 @@ module Predicated
   end
   
   class Call < Operation
-    def phrase(linking)
+    def verb_phrase(linking)
       method_str = method_sym.to_s.sub("?", "")
       " does#{linking} #{method_str} "
     end
