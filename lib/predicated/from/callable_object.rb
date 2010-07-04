@@ -4,6 +4,8 @@ require "predicated/from/ruby_string"
 require 'ruby2ruby'
 require 'parse_tree'
 
+#Procs and lambdas are "callable objects"
+
 module Predicated
   module Predicate
 
@@ -49,6 +51,13 @@ module Predicated
         self.new.process(sexp)
       end
       
+      #sconover - 7/2010 - monkey-patch
+      #{1=>2}=={1=>2}
+      #The right side was having its braces cut off because of 
+      #special handling of hashes within arglists within the seattlerb code.
+      #I tried to fork r2r and add a test, but a lot of other tests
+      #broke, and I just dont understand the test in ruby2ruby.
+      #So I'm emailing the author...
       def process_hash(exp)
         result = []
         until exp.empty?

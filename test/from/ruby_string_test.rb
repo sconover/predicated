@@ -4,7 +4,7 @@ require "predicated/from/ruby_string"
 include Predicated
 
 apropos "parse a ruby predicate string" do
-
+  
   apropos "basic operations" do
     
     #'Wrong'-style asserts are specifically avoided here.
@@ -72,11 +72,19 @@ apropos "parse a ruby predicate string" do
                    Predicate{ And( Or(Eq(1,1),Eq(2,2)), Eq(3,3) ) }
     end
     
-    test "only pay attention to the final line" do
+    apropos "only pay attention to the final line" do
       #might hate myself one day for this.  but what else does it make sense to do?
-      assert_equal Predicate.from_ruby_string("z=2\nb=5\n1==1"), Predicate{ Eq(1,1) }
-    end
+      
+      test "simple" do
+        assert_equal Predicate.from_ruby_string("z=2\nb=5\n1==1"), Predicate{ Eq(1,1) }
+      end
 
+      test "can make use of variables defined earlier in the block" do
+        #might hate myself one day for this.  but what else does it make sense to do?
+        assert_equal Predicate.from_ruby_string("z=2\nb=5\nz==1"), Predicate{ Eq(2,1) }
+      end
+    end
+    
     test "a call that returns a boolean result" do
       assert_equal Predicate.from_ruby_string("'abc'.include?('bc')"), 
                    Predicate{ Call('abc', :include?, 'bc') }
