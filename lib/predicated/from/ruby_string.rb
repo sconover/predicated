@@ -1,6 +1,7 @@
 require "predicated/predicate"
 
 require 'ruby_parser'
+require 'ruby2ruby'
 
 module Predicated
   module Predicate
@@ -29,8 +30,8 @@ module Predicated
         if first_element == :call
           sym, left, sign, right = sexp
           SIGN_TO_PREDICATE_CLASS[sign].new(
-            operation_part(left), 
-            operation_part(right)
+            eval(Ruby2Ruby.new.process(left), @context), 
+            eval(Ruby2Ruby.new.process(right), @context)
           )
         elsif first_element == :and
           sym, left, right = sexp
@@ -39,46 +40,6 @@ module Predicated
           sym, left, right = sexp
           Or.new(convert(left), convert(right))
         else
-          raise DontKnowWhatToDoWithThisSexpError.new(sexp)
-        end
-      end
-      
-      private
-      def operation_part(sexp)
-        first_element = sexp.first
-        
-        if first_element == :call
-          do_call(sexp)
-        elsif first_element == :arglist
-          literal = sexp[1] #[:arglist, [:lit, 999]]          
-          operation_part(literal)
-        elsif first_element == :lit || first_element == :str
-          value = sexp[1] #[:lit, 999]
-          value
-        elsif first_element == :true
-          true #[:true]
-        elsif first_element == :false
-          false #[:false]
-        else
-          raise DontKnowWhatToDoWithThisSexpError.new(sexp)
-        end
-      end
-      
-      def do_call(sexp)
-        second_element = sexp[1]
-        if second_element.nil?
-          name = sexp[2].to_s #[:call, nil, :aaa, [:arglist]]
-          eval(name, @context)
-        elsif second_element.is_a?(Array) && second_element[0]==:call
-          #[:call, [:call, [:const, :Color], :new, [:arglist, [:str, "red"]]]
-          do_call(second_element)
-        elsif second_element.is_a?(Array) && second_element[0]==:const
-          # [:call, [:const, :Color], :new, [:arglist, [:str, "red"]]
-          sym, subject, method, args = sexp
-          sym, subject_const = subject
-          sym, arg_list = args
-          Object.const_get(subject_const).send(method, arg_list[1]) #brittle
-        else 
           raise DontKnowWhatToDoWithThisSexpError.new(sexp)
         end
       end
