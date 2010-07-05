@@ -1,9 +1,8 @@
 require "test/test_helper_with_wrong"
 
 require "predicated/predicate"
-require "predicated/from/url_fragment_parser"
+require "predicated/from/url_fragment"
 include Predicated
-include Predicated::From
 
 apropos "parse a url fragment, the result is a parse tree" do
   
@@ -16,7 +15,7 @@ apropos "parse a url fragment, the result is a parse tree" do
     test "parse" do
       tree = @parser.parse("a=1")
       
-      assert{ tree.is_a?(Predicated::From::TreetopUrlFragment::OperationNode) }      
+      assert{ tree.is_a?(Predicated::TreetopUrlFragment::OperationNode) }      
       assert{ [tree.left_text, tree.sign_text, tree.right_text] == ["a", "=", "1"] }
       
       tree = @parser.parse("a>1")
@@ -46,7 +45,7 @@ apropos "parse a url fragment, the result is a parse tree" do
     test "parse" do
       tree = @parser.parse("a=1&b=2")
 
-      assert{ tree.is_a?(Predicated::From::TreetopUrlFragment::AndNode) }      
+      assert{ tree.is_a?(Predicated::TreetopUrlFragment::AndNode) }      
       assert{ [[tree.left.left_text, tree.left.sign_text, tree.left.right_text],
                [tree.right.left_text, tree.right.sign_text, tree.right.right_text]] == 
                [["a", "=", "1"], ["b", "=", "2"]] }      
@@ -61,7 +60,7 @@ apropos "parse a url fragment, the result is a parse tree" do
     test "parse" do
       tree = @parser.parse("a=1|b=2")
 
-      assert{ tree.is_a?(Predicated::From::TreetopUrlFragment::OrNode) }      
+      assert{ tree.is_a?(Predicated::TreetopUrlFragment::OrNode) }      
       assert{ [[tree.left.left_text, tree.left.sign_text, tree.left.right_text],
                [tree.right.left_text, tree.right.sign_text, tree.right.right_text]] == 
                [["a", "=", "1"], ["b", "=", "2"]] }      
