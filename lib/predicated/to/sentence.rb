@@ -3,45 +3,75 @@ require "predicated/evaluate"
 
 module Predicated
   
-  {And => " and ",
-   Or => " or "}.each do |predicated_class, joining_str|
+  module ContainerSentence
+    def to_sentence
+      left.to_sentence + "#{joining_str}" + right.to_sentence
+    end
 
-     predicated_class.class_eval %{
-      def to_sentence
-        left.to_sentence + "#{joining_str}" + right.to_sentence
-      end
-
-      def to_negative_sentence
-        "This is not true: " + to_sentence
-      end
-    }
+    def to_negative_sentence
+      "This is not true: " + to_sentence
+    end
   end
   
+  class And; include ContainerSentence; def joining_str; " and " end; end
+  class Or; include ContainerSentence; def joining_str; " or " end;end
+  
   class Operation
-    CLASS_TO_PHRASE = {
-      Equal => "equal to",
-      GreaterThan => "greater than",
-      LessThan => "less than",
-      GreaterThanOrEqualTo => "greater than or equal to",
-      LessThanOrEqualTo => "less than or equal to"
-    }
+
+    def self.register_verb_phrase(method_sym, 
+                                  positive_verb_phrase, 
+                                  negative_verb_phrase, 
+                                  accepts_object=true)      
+      @@method_sym_to_phrase_info[method_sym] = {
+        :positive => positive_verb_phrase,
+        :negative => negative_verb_phrase,
+        :accepts_object => accepts_object
+      }
+    end
+    
+    def self.reset_verb_phrases
+      @@method_sym_to_phrase_info = {}
+      
+      register_verb_phrase(:==, "is equal to", "is not equal to")
+      register_verb_phrase(:>, "is greater than", "is not greater than")
+      register_verb_phrase(:<, "is less than", "is not less than")
+      register_verb_phrase(:>=, "is greater than or equal to", "is not greater than or equal to")
+      register_verb_phrase(:<=, "is less than or equal to", "is not less than or equal to")
+
+      register_verb_phrase(:include?, "includes", "does not include")
+      register_verb_phrase(:nil?, "is nil", "is not nil", accepts_object=false)
+      
+      nil
+    end
+    
+    reset_verb_phrases
+    
     
     def to_sentence
-      sentence("")
+      sentence(verb_phrase[:positive])
     end
     
     def to_negative_sentence
-      sentence(" not")
+      sentence(verb_phrase[:negative])
     end
     
     private 
     
-    def sentence(linking)
-      format_value(left) + verb_phrase(linking) + format_value(right)
+    def sentence(verb_phrase_str)
+      left_str = format_value(left)
+      right_str = format_value(right)
+      
+      str = left_str + " " + verb_phrase_str
+      str << " " + right_str if verb_phrase[:accepts_object]
+      str
     end
-    
-    def verb_phrase(linking)
-      " is#{linking} #{CLASS_TO_PHRASE[self.class]} "
+          
+    def verb_phrase
+      @@method_sym_to_phrase_info[method_sym] || {
+        :positive => "is " + rudimentary=method_sym.to_s.gsub("_", " ").gsub("?", ""),
+        :negative => "is not " + rudimentary,
+        :accepts_object => true
+      } 
     end
         
     def format_value(value)
@@ -54,13 +84,6 @@ module Predicated
       else
         "'" + value.inspect + "'"
       end
-    end
-  end
-  
-  class Call < Operation
-    def verb_phrase(linking)
-      method_str = method_sym.to_s.sub("?", "")
-      " does#{linking} #{method_str} "
     end
   end
   
