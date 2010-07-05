@@ -1,4 +1,4 @@
-Predicated provides a simple predicate object model in ruby.
+Predicated is a simple predicate model for Ruby.
 
 Tracker project:
 http://www.pivotaltracker.com/projects/95014
