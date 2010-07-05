@@ -18,7 +18,7 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
     
     test "primitive types" do
       assert_equal Predicate.from_callable_object{false==true}, Predicate{ Eq(false,true) }
-      assert_equal Predicate.from_callable_object{'yyy'=='zzz'}, Predicate{ Eq("yyy","zzz") }
+      assert_equal Predicate.from_callable_object{"yyy"=="zzz"}, Predicate{ Eq("yyy","zzz") }
     end                                      
                                              
     test "complex types" do

@@ -87,14 +87,14 @@ apropos "parse a ruby predicate string" do
     
     test "a call that returns a boolean result" do
       assert_equal Predicate.from_ruby_string("'abc'.include?('bc')"), 
-                   Predicate{ Call('abc', :include?, 'bc') }
+                   Predicate{ Call("abc", :include?, "bc") }
       
       color = Color.new("purple")  
       assert_equal Predicate.from_ruby_string("color.name.include?('rp')", binding()), 
-                   Predicate{ Call('purple', :include?, 'rp') }
+                   Predicate{ Call("purple", :include?, "rp") }
                    
       assert_equal Predicate.from_ruby_string("'abc'.nil?"), 
-                   Predicate{ Call('abc', :nil?, nil) }
+                   Predicate{ Call("abc", :nil?, nil) }
     end
     
 
