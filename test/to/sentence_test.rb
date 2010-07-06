@@ -27,6 +27,7 @@ apropos "convert a predicate to an english sentence" do
     assert { Predicate{ Eq("a",1) }.to_sentence == "'a' is equal to 1" }
     assert { Predicate{ Eq("a",nil) }.to_sentence == "'a' is equal to nil" }
     assert { Predicate{ Eq("a",true) }.to_sentence == "'a' is equal to true" }
+    assert { Predicate{ Eq("a",3.14) }.to_sentence == "'a' is equal to 3.14" }
   end
   
   test "complex types" do

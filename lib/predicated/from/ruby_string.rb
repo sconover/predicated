@@ -31,13 +31,13 @@ module Predicated
           #eval all the top lines and then treat the last one as a predicate
           body_sexps = sexp.sexp_body.to_a
           body_sexps.slice(0..-2).each do |upper_sexp|
-            eval(Ruby2Ruby.new.process(upper_sexp), @context)
+            eval_sexp(upper_sexp)
           end
           convert(body_sexps.last)
         elsif first_element == :call
           sym, left_sexp, method_sym, right_sexp = sexp
-          left = eval(Ruby2Ruby.new.process(left_sexp), @context)
-          right = eval(Ruby2Ruby.new.process(right_sexp), @context)
+          left = eval_sexp(left_sexp)
+          right = eval_sexp(right_sexp)
 
           if operation_class=SIGN_TO_PREDICATE_CLASS[method_sym]
             operation_class.new(left, right)
@@ -54,7 +54,12 @@ module Predicated
           raise DontKnowWhatToDoWithThisSexpError.new(sexp)
         end
       end
+    
+      def eval_sexp(sexp)
+        eval(Ruby2Ruby.new.process(sexp), @context)
+      end
     end
+    
     
     class DontKnowWhatToDoWithThisSexpError < StandardError
       def initialize(sexp)

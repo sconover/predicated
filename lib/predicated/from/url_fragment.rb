@@ -18,7 +18,7 @@ grammar TreetopUrlFragment
 include Predicated::TreetopUrlFragment
 
 rule or
- 	( and "|" or <OrNode>)  / and
+  ( and "|" or <OrNode>)  / and
 end 
 
 rule and
