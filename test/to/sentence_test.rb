@@ -56,6 +56,9 @@ apropos "convert a predicate to an english sentence" do
   test "some other common methods have sensible verb phrases by default" do
     assert { Predicate{ Call("abc", :include?, 'bc') }.to_sentence == "'abc' includes 'bc'" }
     assert { Predicate{ Call("abc", :include?, 'bc') }.to_negative_sentence == "'abc' does not include 'bc'" }
+    
+    assert { Predicate{ Call("abc", :is_a?, String) }.to_sentence == "'abc' is a 'String'" }
+    assert { Predicate{ Call("abc", :is_a?, String) }.to_negative_sentence == "'abc' is not a 'String'" }
   end
   
   test "nothing on the far side" do

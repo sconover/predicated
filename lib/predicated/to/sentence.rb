@@ -39,6 +39,7 @@ module Predicated
       register_verb_phrase(:<=, "is less than or equal to", "is not less than or equal to")
 
       register_verb_phrase(:include?, "includes", "does not include")
+      register_verb_phrase(:is_a?, "is a", "is not a")
       register_verb_phrase(:nil?, "is nil", "is not nil", accepts_object=false)
       
       nil
