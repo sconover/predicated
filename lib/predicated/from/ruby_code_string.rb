@@ -7,7 +7,7 @@ module Predicated
   require_gem_version("ruby2ruby", "1.2.4")
 
   module Predicate
-    def self.from_ruby_string(ruby_predicate_string, context=binding())
+    def self.from_ruby_code_string(ruby_predicate_string, context=binding())
       sexp = RubyParser.new.process(ruby_predicate_string.strip)
       SexpToPredicate.new(context).convert(sexp)
     end

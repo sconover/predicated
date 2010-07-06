@@ -1,5 +1,5 @@
 require "predicated/predicate"
-require "predicated/from/ruby_string"
+require "predicated/from/ruby_code_string"
 
 #Procs and lambdas are "callable objects"
 
@@ -22,7 +22,7 @@ module Predicated
       
       context ||= callable_object.binding
       
-      from_ruby_string(TranslateToRubyString.convert(callable_object), context)
+      from_ruby_code_string(TranslateToRubyString.convert(callable_object), context)
     end
 
     module TranslateToRubyString
@@ -32,8 +32,8 @@ module Predicated
         temp_class.class_eval do
           define_method :serializable, &callable_object
         end
-        ruby_string = Ruby2Ruby.translate(temp_class, :serializable)    
-        ruby_string.sub(/^def serializable\n  /, "").sub(/\nend$/, "")
+        ruby_code_string = Ruby2Ruby.translate(temp_class, :serializable)    
+        ruby_code_string.sub(/^def serializable\n  /, "").sub(/\nend$/, "")
       end
     end
     
