@@ -1,12 +1,12 @@
 require "predicated/predicate"
 require "predicated/from/ruby_string"
 
-require "ruby2ruby"
-require "parse_tree"
-
 #Procs and lambdas are "callable objects"
 
 module Predicated
+  
+  require_gem_version("ParseTree", "3.0.5", "parse_tree")
+  
   module Predicate
 
                                   #hrm

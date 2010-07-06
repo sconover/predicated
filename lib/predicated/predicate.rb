@@ -1,5 +1,5 @@
+require "predicated/gem_check"
 require "predicated/selector"
-
 
 module Predicated
   def Predicate(&block)

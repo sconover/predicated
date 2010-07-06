@@ -1,7 +1,9 @@
 require "predicated/predicate"
-require "treetop"
 
 module Predicated
+  
+  require_gem_version("treetop", "1.4.8")
+  
   module Predicate
     def self.from_url_fragment(url_fragment_string)
       TreetopUrlFragmentParser.new.parse(url_fragment_string).to_predicate

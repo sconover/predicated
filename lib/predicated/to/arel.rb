@@ -1,9 +1,10 @@
 raise "this doesn't work in 1.8.6 because the arel gem is 1.8.7-only" if RUBY_VERSION=="1.8.6"
 
-require "arel"
 require "predicated/predicate"
 
 module Predicated
+  
+  require_gem_version("arel", "0.4.0")
   
   {And => Arel::Predicates::And,
    Or => Arel::Predicates::Or}.each do |predicated_class, arel_class|

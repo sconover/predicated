@@ -1,10 +1,11 @@
 require "predicated/predicate"
 require "predicated/evaluate"
 
-require 'ruby_parser'
-require 'ruby2ruby'
-
 module Predicated
+
+  require_gem_version("ruby_parser", "2.0.4")
+  require_gem_version("ruby2ruby", "1.2.4")
+
   module Predicate
     def self.from_ruby_string(ruby_predicate_string, context=binding())
       sexp = RubyParser.new.process(ruby_predicate_string.strip)
