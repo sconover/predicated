@@ -97,6 +97,25 @@ apropos "parse a ruby predicate string" do
                    Predicate{ Call("abc", :nil?, nil) }
     end
     
+    test "use of instance variables" do
+      @a = 1
+      
+      assert_equal Predicate.from_ruby_string("@a==1", binding()), Predicate{ Eq(1,1) }
+    end
+                            
+    test "use of inline assignments" do
+      assert_equal Predicate.from_ruby_string("(a=2)==1 && a==1"), 
+                   Predicate{ And(Eq(2,1), Eq(2,1)) }
+    end
+                            
+    test "use of inline expressions" do
+      assert_equal Predicate.from_ruby_string("(2*1)==1"), 
+                   Predicate{ Eq(2,1) }
+                   
+      assert_equal Predicate.from_ruby_string("[2,1].first==1"), 
+                   Predicate{ Eq(2,1) }
+    end
+
 
   end
   
@@ -105,7 +124,7 @@ apropos "parse a ruby predicate string" do
       assert_raises(Racc::ParseError) do 
         Predicate.from_ruby_string("bad ruby @@@@@****()(((")
       end
-    end
+    end  
     
     test "predicates only" do
       assert_raises(Predicated::Predicate::DontKnowWhatToDoWithThisSexpError) do 

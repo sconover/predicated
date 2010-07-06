@@ -88,8 +88,7 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
         Predicate{ Eq("aaa","bbb") }
       assert_equal Predicate.from_callable_object(lambda{a=="bbb"}, binding()), 
         Predicate{ Eq("aaa","bbb") }
-    end                                      
-                                                 
+    end          
 
   end
   
