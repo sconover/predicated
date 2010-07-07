@@ -20,5 +20,28 @@ module Predicated
     end
   end
   
+  class GreaterThan
+    def to_solr
+      "#{left}:[#{(right+1)} TO *]"
+    end
+  end
+  
+  class LessThan
+    def to_solr
+      "#{left}:[* TO #{(right-1)}]"
+    end
+  end
+  
+  class GreaterThanOrEqualTo
+    def to_solr
+      "#{left}:[#{right} TO *]"
+    end
+  end
+  
+  class LessThanOrEqualTo
+    def to_solr
+      "#{left}:[* TO #{right}]"
+    end
+  end
   
 end

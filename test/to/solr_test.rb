@@ -10,10 +10,10 @@ apropos "convert a predicate to a solr query" do
   end
   
   test "gt, lt, gte, lte" do
-    # assert { Predicate{ Gt("a",1) }.to_solr == "a:[2 TO *]" }
-    # assert { Predicate{ Lt("a",1) }.to_solr == Arel::Predicates::LessThan.new("a", 1) }
-    # assert { Predicate{ Gte("a",1) }.to_solr == Arel::Predicates::GreaterThanOrEqualTo.new("a", 1) }
-    # assert { Predicate{ Lte("a",1) }.to_solr == Arel::Predicates::LessThanOrEqualTo.new("a", 1) }
+    assert { Predicate{ Gt("a",3) }.to_solr == "a:[4 TO *]" }
+    assert { Predicate{ Lt("a",3) }.to_solr == "a:[* TO 2]" }
+    assert { Predicate{ Gte("a",3) }.to_solr == "a:[3 TO *]" }
+    assert { Predicate{ Lte("a",3) }.to_solr == "a:[* TO 3]" }
   end
 
   test "simple and + or" do

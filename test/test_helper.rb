@@ -8,6 +8,13 @@ require "pp"
 #DO NOT REQUIRE WRONG IN HERE
 #The circularity between projects will cause certain tests to not work.
 
+def run_suite(wildcard)
+  #simple way to make sure requires are isolated
+  result = Dir[wildcard].collect{|test_file| system("ruby #{test_file}") }.uniq == [true]
+  puts "suite " + (result ? "passed" : "FAILED")
+  exit(result ? 0 : 1)
+end
+
 class MiniTest::Unit::TestCase
   
   def assert_raise(exception_info_regex)
