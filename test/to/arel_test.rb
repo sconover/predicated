@@ -1,4 +1,5 @@
 require "test/test_helper_with_wrong"
+require "test/to/canonical_to_tests"
 
 unless RUBY_VERSION=="1.8.6"
   
@@ -6,6 +7,7 @@ require "predicated/to/arel"
 include Predicated
 
 apropos "convert a predicate to an arel where clause" do
+  include CanonicalToTests
   
   class FakeEngine
     def connection
@@ -28,6 +30,31 @@ apropos "convert a predicate to an arel where clause" do
     end
   end
   
+  @table = Arel::Table.new(:widget, :engine => FakeEngine.new)
+  Arel::Table.tables = [@table]
+  @table.instance_variable_set("@columns".to_sym, [
+    FakeColumn.new("a", :integer), 
+    FakeColumn.new("b", :integer),
+    FakeColumn.new("c", :integer)
+  ])
+
+  
+  @to_expectations = {
+    "simple operations" => {
+      "eq" => Arel::Predicates::Equality.new(@table.attributes["a"], 1),
+      "gt" => Arel::Predicates::GreaterThan.new(@table.attributes["a"], 1),
+      "lt" => Arel::Predicates::LessThan.new(@table.attributes["a"], 1),
+      "gte" => Arel::Predicates::GreaterThanOrEqualTo.new(@table.attributes["a"], 1),
+      "lte" => Arel::Predicates::LessThanOrEqualTo.new(@table.attributes["a"], 1)
+    }
+  }
+  
+  create_canonoical_to_tests(@to_expectations) do |predicate|
+    predicate.to_arel(@table)
+  end
+  
+  
+  
   before do
     @table = Arel::Table.new(:widget, :engine => FakeEngine.new)
     Arel::Table.tables = [@table]
@@ -36,18 +63,6 @@ apropos "convert a predicate to an arel where clause" do
       FakeColumn.new("b", :integer),
       FakeColumn.new("c", :integer)
     ])
-  end
-
-  test "operations" do
-    assert { Predicate{ Eq("a",1) }.to_arel(@table) ==
-      Arel::Predicates::Equality.new(@table.attributes["a"], 1) }
-    assert { Predicate{ Gt("a",1) }.to_arel(@table) == 
-      Arel::Predicates::GreaterThan.new(@table.attributes["a"], 1) }
-    assert { Predicate{ Lt("a",1) }.to_arel(@table) == 
-      Arel::Predicates::LessThan.new(@table.attributes["a"], 1) }
-    assert { Predicate{ Gte("a",1) }.to_arel(@table) == Arel::Predicates::GreaterThanOrEqualTo.new(@table.attributes["a"], 1) }
-    assert { Predicate{ Lte("a",1) }.to_arel(@table) ==
-      Arel::Predicates::LessThanOrEqualTo.new(@table.attributes["a"], 1) }
   end
 
   test "simple and + or" do
