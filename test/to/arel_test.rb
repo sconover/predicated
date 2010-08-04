@@ -41,11 +41,11 @@ apropos "convert a predicate to an arel where clause" do
   
   @to_expectations = {
     "simple operations" => {
-      "eq" => Arel::Predicates::Equality.new(@table.attributes["a"], 1),
-      "gt" => Arel::Predicates::GreaterThan.new(@table.attributes["a"], 1),
-      "lt" => Arel::Predicates::LessThan.new(@table.attributes["a"], 1),
-      "gte" => Arel::Predicates::GreaterThanOrEqualTo.new(@table.attributes["a"], 1),
-      "lte" => Arel::Predicates::LessThanOrEqualTo.new(@table.attributes["a"], 1)
+      "eq" => Arel::Predicates::Equality.new(@table.attributes["a"], 3),
+      "gt" => Arel::Predicates::GreaterThan.new(@table.attributes["a"], 3),
+      "lt" => Arel::Predicates::LessThan.new(@table.attributes["a"], 3),
+      "gte" => Arel::Predicates::GreaterThanOrEqualTo.new(@table.attributes["a"], 3),
+      "lte" => Arel::Predicates::LessThanOrEqualTo.new(@table.attributes["a"], 3)
     }
   }
   

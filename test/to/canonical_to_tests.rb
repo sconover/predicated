@@ -4,11 +4,11 @@ module CanonicalToTests
     def create_canonoical_to_tests(to_expectations)
       tests = {
         "simple operations" => {
-          "eq" => Predicate{ Eq("a",1) },
-          "gt" => Predicate{ Gt("a",1) },
-          "lt" => Predicate{ Lt("a",1) },
-          "gte" => Predicate{ Gte("a",1) },
-          "lte" => Predicate{ Lte("a",1) }
+          "eq" => Predicate{ Eq("a",3) },
+          "gt" => Predicate{ Gt("a",3) },
+          "lt" => Predicate{ Lt("a",3) },
+          "gte" => Predicate{ Gte("a",3) },
+          "lte" => Predicate{ Lte("a",3) }
         }
       }
   

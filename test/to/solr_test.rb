@@ -1,21 +1,26 @@
 require "test/test_helper_with_wrong"
+require "test/to/canonical_to_tests"
 
 require "predicated/to/solr"
 include Predicated
 
 apropos "convert a predicate to a solr query" do
+  include CanonicalToTests
+  
+  @to_expectations = {
+    "simple operations" => {
+      "eq" => "a:3",
+      "gt" => "a:[4 TO *]",
+      "lt" => "a:[* TO 2]",
+      "gte" => "a:[3 TO *]",
+      "lte" => "a:[* TO 3]"
+    }
+  }
+  
+  create_canonoical_to_tests(@to_expectations) do |predicate|
+    predicate.to_solr
+  end
 
-  test "equal" do
-    assert { Predicate{ Eq("a",1) }.to_solr == "a:1" }
-  end
-  
-  test "gt, lt, gte, lte" do
-    assert { Predicate{ Gt("a",3) }.to_solr == "a:[4 TO *]" }
-    assert { Predicate{ Lt("a",3) }.to_solr == "a:[* TO 2]" }
-    assert { Predicate{ Gte("a",3) }.to_solr == "a:[3 TO *]" }
-    assert { Predicate{ Lte("a",3) }.to_solr == "a:[* TO 3]" }
-  end
-  
   test "simple and + or" do
     #parens are necessary around AND's in solr in order to force precedence
     assert { Predicate{ And(Eq("a", 1),Eq("b", 2)) }.to_solr == "(a:1 AND b:2)" }
