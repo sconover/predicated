@@ -46,48 +46,30 @@ apropos "convert a predicate to an arel where clause" do
       "lt" => Arel::Predicates::LessThan.new(@table.attributes["a"], 3),
       "gte" => Arel::Predicates::GreaterThanOrEqualTo.new(@table.attributes["a"], 3),
       "lte" => Arel::Predicates::LessThanOrEqualTo.new(@table.attributes["a"], 3)
+    },
+    "simple and / or" => {
+      "and" => Arel::Predicates::And.new(
+                 Arel::Predicates::Equality.new(@table.attributes["a"], 1), 
+                 Arel::Predicates::Equality.new(@table.attributes["b"], 2)
+               ),
+      "or" => Arel::Predicates::Or.new(
+                Arel::Predicates::Equality.new(@table.attributes["a"], 1), 
+                Arel::Predicates::Equality.new(@table.attributes["b"], 2)
+              )
+    },
+    "complex and / or" => {
+      "or and" => Arel::Predicates::Or.new(
+                    Arel::Predicates::And.new(
+                      Arel::Predicates::Equality.new(@table.attributes["a"], 1), 
+                      Arel::Predicates::Equality.new(@table.attributes["b"], 2)
+                    ), 
+                    Arel::Predicates::Equality.new(@table.attributes["c"], 3)
+                  )
     }
   }
   
   create_canonoical_to_tests(@to_expectations) do |predicate|
     predicate.to_arel(@table)
-  end
-  
-  
-  
-  before do
-    @table = Arel::Table.new(:widget, :engine => FakeEngine.new)
-    Arel::Table.tables = [@table]
-    @table.instance_variable_set("@columns".to_sym, [
-      FakeColumn.new("a", :integer), 
-      FakeColumn.new("b", :integer),
-      FakeColumn.new("c", :integer)
-    ])
-  end
-
-  test "simple and + or" do
-    assert { Predicate{ And(Eq("a", 1),Eq("b", 2)) }.to_arel(@table) == 
-              Arel::Predicates::And.new(
-                Arel::Predicates::Equality.new(@table.attributes["a"], 1), 
-                Arel::Predicates::Equality.new(@table.attributes["b"], 2)
-              ) }
-
-    assert { Predicate{ Or(Eq("a", 1),Eq("b", 2)) }.to_arel(@table) == 
-              Arel::Predicates::Or.new(
-                Arel::Predicates::Equality.new(@table.attributes["a"], 1), 
-                Arel::Predicates::Equality.new(@table.attributes["b"], 2)
-              ) }
-  end
-  
-  test "complex and + or" do
-    assert { Predicate{ Or( And(Eq("a", 1),Eq("b", 2)), Eq("c", 3) ) }.to_arel(@table) ==
-              Arel::Predicates::Or.new(
-                Arel::Predicates::And.new(
-                  Arel::Predicates::Equality.new(@table.attributes["a"], 1), 
-                  Arel::Predicates::Equality.new(@table.attributes["b"], 2)
-                ), 
-                Arel::Predicates::Equality.new(@table.attributes["c"], 3)
-              ) }
   end
 
 end

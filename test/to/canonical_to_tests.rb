@@ -9,6 +9,13 @@ module CanonicalToTests
           "lt" => Predicate{ Lt("a",3) },
           "gte" => Predicate{ Gte("a",3) },
           "lte" => Predicate{ Lte("a",3) }
+        },
+        "simple and / or" => {
+          "and" => Predicate{ And(Eq("a", 1),Eq("b", 2)) },
+          "or" => Predicate{ Or(Eq("a", 1),Eq("b", 2)) }
+        },
+        "complex and / or" => {
+          "or and" => Predicate{ Or(And(Eq("a", 1),Eq("b", 2)), Eq("c",3)) } 
         }
       }
   
@@ -16,7 +23,10 @@ module CanonicalToTests
         test test_name do
           
           not_found = 
-            cases.keys.sort.reject{|case_name|to_expectations[test_name][case_name]}
+            cases.keys.sort.select do |case_name|
+              to_expectations[test_name].nil? || 
+              to_expectations[test_name][case_name].nil?
+            end
           
           raise "no expectation defined for test: '#{test_name}'  cases: [#{not_found.join(", ")}]" unless not_found.empty?
           
