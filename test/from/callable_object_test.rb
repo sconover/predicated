@@ -1,9 +1,12 @@
 require "test/test_helper"
+require "test/canonical_transform_cases"
 
 require "predicated/from/callable_object"
 include Predicated
 
 apropos "convert a ruby callable object - a proc or lambda - into a predicate" do
+
+
 
   apropos "basic operations" do
 

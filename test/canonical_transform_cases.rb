@@ -31,7 +31,8 @@ module CanonicalTransformCases
           raise "no expectation defined for test: '#{test_name}'  cases: [#{not_found.join(", ")}]" unless not_found.empty?
           
           cases.each do |case_name, predicate|
-            assert { yield(predicate) == expectations[test_name][case_name] }
+            actual = block_given? ? yield(predicate) : predicate
+            assert { actual == expectations[test_name][case_name] }
           end
         end
       end
