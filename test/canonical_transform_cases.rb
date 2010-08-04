@@ -1,7 +1,7 @@
-module CanonicalToTests
+module CanonicalTransformCases
   
   module ClassMethods
-    def create_canonoical_to_tests(to_expectations)
+    def create_canonical_tests(expectations)
       tests = {
         "simple operations" => {
           "eq" => Predicate{ Eq("a",3) },
@@ -24,14 +24,14 @@ module CanonicalToTests
           
           not_found = 
             cases.keys.sort.select do |case_name|
-              to_expectations[test_name].nil? || 
-              to_expectations[test_name][case_name].nil?
+              expectations[test_name].nil? || 
+              expectations[test_name][case_name].nil?
             end
           
           raise "no expectation defined for test: '#{test_name}'  cases: [#{not_found.join(", ")}]" unless not_found.empty?
           
           cases.each do |case_name, predicate|
-            assert { yield(predicate) == to_expectations[test_name][case_name] }
+            assert { yield(predicate) == expectations[test_name][case_name] }
           end
         end
       end

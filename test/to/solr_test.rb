@@ -1,11 +1,11 @@
 require "test/test_helper_with_wrong"
-require "test/to/canonical_to_tests"
+require "test/canonical_transform_cases"
 
 require "predicated/to/solr"
 include Predicated
 
 apropos "convert a predicate to a solr query" do
-  include CanonicalToTests
+  include CanonicalTransformCases
   
   @to_expectations = {
     "simple operations" => {
@@ -25,7 +25,7 @@ apropos "convert a predicate to a solr query" do
     }
   }
   
-  create_canonoical_to_tests(@to_expectations) do |predicate|
+  create_canonical_tests(@to_expectations) do |predicate|
     predicate.to_solr
   end
 

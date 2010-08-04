@@ -1,5 +1,5 @@
 require "test/test_helper_with_wrong"
-require "test/to/canonical_to_tests"
+require "test/canonical_transform_cases"
 
 unless RUBY_VERSION=="1.8.6"
   
@@ -7,7 +7,7 @@ require "predicated/to/arel"
 include Predicated
 
 apropos "convert a predicate to an arel where clause" do
-  include CanonicalToTests
+  include CanonicalTransformCases
   
   class FakeEngine
     def connection
@@ -68,7 +68,7 @@ apropos "convert a predicate to an arel where clause" do
     }
   }
   
-  create_canonoical_to_tests(@to_expectations) do |predicate|
+  create_canonical_tests(@to_expectations) do |predicate|
     predicate.to_arel(@table)
   end
 
