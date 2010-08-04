@@ -47,6 +47,11 @@ apropos "convert a predicate to an arel where clause" do
       "gte" => Arel::Predicates::GreaterThanOrEqualTo.new(@table.attributes["a"], 3),
       "lte" => Arel::Predicates::LessThanOrEqualTo.new(@table.attributes["a"], 3)
     },
+    "primitive types" => {
+      "false" => Arel::Predicates::Equality.new(@table.attributes["a"], false),
+      "true" => Arel::Predicates::Equality.new(@table.attributes["a"], true),
+      "string" => Arel::Predicates::Equality.new(@table.attributes["a"], "yyy")
+    },
     "simple and / or" => {
       "and" => Arel::Predicates::And.new(
                  Arel::Predicates::Equality.new(@table.attributes["a"], 1), 

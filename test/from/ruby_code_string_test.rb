@@ -10,11 +10,6 @@ apropos "parse a ruby predicate string" do
     #'Wrong'-style asserts are specifically avoided here.
     #the circularity between the two projects will make you crazy if you're not careful
     
-    test "primitive types" do
-      assert_equal Predicate.from_ruby_code_string("false==true"), Predicate{ Eq(false,true) }
-      assert_equal Predicate.from_ruby_code_string("'yyy'=='zzz'"), Predicate{ Eq("yyy","zzz") }
-    end
-
     test "word and" do
       assert_equal Predicate.from_ruby_code_string("1==1 and 2==2"), Predicate{ And(Eq(1,1),Eq(2,2)) }
     end

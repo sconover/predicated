@@ -15,6 +15,11 @@ apropos "callable object - canoical transform cases" do
       "gte" => Predicate.from_callable_object{"a">=3},
       "lte" => Predicate.from_callable_object{"a"<=3}
     },
+    "primitive types" => {
+      "false" => Predicate.from_callable_object{"a"==false},
+      "true" => Predicate.from_callable_object{"a"==true},
+      "string" => Predicate.from_callable_object{"a"=="yyy"}
+    },
     "simple and / or" => {
       #parens are necessary around AND's in solr in order to force precedence
       "and" => Predicate.from_callable_object{"a"==1 && "b"==2},

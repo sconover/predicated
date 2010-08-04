@@ -15,6 +15,11 @@ apropos "convert a predicate to a solr query" do
       "gte" => "a:[3 TO *]",
       "lte" => "a:[* TO 3]"
     },
+    "primitive types" => {
+      "false" => "a:false",
+      "true" => "a:true",
+      "string" => "a:yyy"
+    },
     "simple and / or" => {
       #parens are necessary around AND's in solr in order to force precedence
       "and" => "(a:1 AND b:2)",

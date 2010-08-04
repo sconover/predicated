@@ -10,6 +10,11 @@ module CanonicalTransformCases
           "gte" => Predicate{ Gte("a",3) },
           "lte" => Predicate{ Lte("a",3) }
         },
+        "primitive types" => {
+          "true" => Predicate{ Eq("a",true) },
+          "false" => Predicate{ Eq("a",false) },
+          "string" => Predicate{ Eq("a","yyy") },
+        },
         "simple and / or" => {
           "and" => Predicate{ And(Eq("a", 1),Eq("b", 2)) },
           "or" => Predicate{ Or(Eq("a", 1),Eq("b", 2)) }
