@@ -1,4 +1,5 @@
 require "test/test_helper_with_wrong"
+require "test_integration/canonical_integration_cases"
 
 require "predicated/predicate"
 require "predicated/to/arel"
@@ -15,6 +16,9 @@ def get_from_db_using_predicate(predicate)
 end
 
 apropos "predicates run against a real db" do
+  include CanonicalIntegrationCases
+  
+  
   before do
     unless @created
       db_file = "/tmp/sqlite_db"
@@ -29,44 +33,20 @@ apropos "predicates run against a real db" do
           age VARCHAR(25), 
           cats NUMERIC);
       })
- 
-      @db.execute("insert into widget values (101, 'red', 'short', 'old', 0)")
-      @db.execute("insert into widget values (102, 'blue', 'tall', 'old', 2)")
-      @db.execute("insert into widget values (103, 'green', 'short', 'young', 3)")
+      
+      self.fixtures.each do |row|
+        @db.execute("insert into widget values (#{row[:id]}, '#{row[:eye_color]}', '#{row[:height]}', '#{row[:age]}', #{row[:cats]})")
+      end
     end
     @created = true    
   end
   
-  test "equal" do
-    assert { get_from_db_using_predicate(Predicate{ Eq("id",101) }) == [101] } 
-    assert { get_from_db_using_predicate(Predicate{ Eq("eye_color","blue") }) == [102] } 
+  create_canonical_tests(
+    :id => "id", 
+    :eye_color => "eye_color", 
+    :height => "height",
+    :age => "age",
+    :cats => "cats") do |predicate|
+      get_from_db_using_predicate(predicate)
   end
-  
-  test "gt, lt, gte, lte" do
-    assert { get_from_db_using_predicate(Predicate{ Gt("cats",1) }) == [102, 103] } 
-    assert { get_from_db_using_predicate(Predicate{ Lt("cats",3) }) == [101, 102] } 
-    assert { get_from_db_using_predicate(Predicate{ Gte("cats",2) }) == [102, 103] } 
-    assert { get_from_db_using_predicate(Predicate{ Lte("cats",2) }) == [101, 102] } 
-  end
-  
-  test "simple and + or" do
-    assert { get_from_db_using_predicate(
-      Predicate{And(Eq("height","tall"),Eq("age","old")) }) == [102] }     
-    assert { get_from_db_using_predicate(
-      Predicate{ And(Eq("height","short"),Eq("age","old")) }) == [101] } 
-              
-    assert { get_from_db_using_predicate(
-      Predicate{Or(Eq("height","short"),Eq("age","young")) }).sort == [101, 103] } 
-  end
-  
-  xtest "complex and + or" do
-    assert { get_from_db_using_predicate(
-          Predicate{ Or(And(Eq("height","short"),Eq("age","young")),Eq("color","red")) }) == 
-            [101, 103] } 
-
-    assert { get_from_db_using_predicate(
-          Predicate{ Or(And(Eq("height","tall"),Eq("age","old")),Eq("color","green")) }) == 
-            [102, 103] } 
-  end
-
 end

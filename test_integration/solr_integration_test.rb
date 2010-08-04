@@ -1,4 +1,5 @@
 require "test/test_helper_with_wrong"
+require "test_integration/canonical_integration_cases"
 require "net/http"
 require "open-uri"
 
@@ -33,70 +34,38 @@ end
 
 
 apropos "predicates run against real solr" do
+  include CanonicalIntegrationCases
+  
   before do
     unless @posted
       post_to_solr("<delete><query>*:*</query></delete>")
       post_to_solr("<commit/>")
-      post_to_solr(%{
-        <add>
+      
+      docs_str = 
+        self.fixtures.collect do |row|
+          %{
           <doc>
-            <field name="id">101</field>
-            <field name="eye_color_s">red</field>
-            <field name="height_s">short</field>
-            <field name="age_s">old</field>
-            <field name="cats_i">0</field>
-          </doc>
-          <doc>
-            <field name="id">102</field>
-            <field name="eye_color_s">blue</field>
-            <field name="height_s">tall</field>
-            <field name="age_s">old</field>
-            <field name="cats_i">2</field>
-          </doc>
-          <doc>
-            <field name="id">103</field>
-            <field name="eye_color_s">green</field>
-            <field name="height_s">short</field>
-            <field name="age_s">young</field>
-            <field name="cats_i">3</field>
-          </doc>
-        </add>
-      })
+            <field name="id">#{row[:id]}</field>
+            <field name="eye_color_s">#{row[:eye_color]}</field>
+            <field name="height_s">#{row[:height]}</field>
+            <field name="age_s">#{row[:age]}</field>
+            <field name="cats_i">#{row[:cats]}</field>
+          </doc>  
+          }
+        end.join("\n")
+      
+      post_to_solr("<add>#{docs_str}</add>")
       post_to_solr("<commit/>")
     end
     @posted = true    
   end
   
-  test "equal" do
-    assert { get_from_solr_using_predicate(Predicate{ Eq("id",101) })["response"]["docs"].collect{|d|d["id"]} == ["101"] } 
-    assert { get_from_solr_using_predicate(Predicate{ Eq("eye_color_s","blue") })["response"]["docs"].collect{|d|d["id"]} == ["102"] } 
+  create_canonical_tests(
+    :id => "id", 
+    :eye_color => "eye_color_s", 
+    :height => "height_s",
+    :age => "age_s",
+    :cats => "cats_i") do |predicate|
+      get_from_solr_using_predicate(predicate)["response"]["docs"].collect{|d|d["id"].to_i}
   end
-  
-  test "gt, lt, gte, lte" do
-    assert { get_from_solr_using_predicate(Predicate{ Gt("cats_i",1) })["response"]["docs"].collect{|d|d["id"]}.sort == ["102", "103"] } 
-    assert { get_from_solr_using_predicate(Predicate{ Lt("cats_i",3) })["response"]["docs"].collect{|d|d["id"]}.sort == ["101", "102"] } 
-    assert { get_from_solr_using_predicate(Predicate{ Gte("cats_i",2) })["response"]["docs"].collect{|d|d["id"]}.sort == ["102", "103"] } 
-    assert { get_from_solr_using_predicate(Predicate{ Lte("cats_i",2) })["response"]["docs"].collect{|d|d["id"]}.sort == ["101", "102"] } 
-  end
-  
-  test "simple and + or" do
-    assert { get_from_solr_using_predicate(Predicate{ And(Eq("height_s","tall"),Eq("age_s","old")) })["response"]["docs"].
-              collect{|d|d["id"]} == ["102"] }     
-    assert { get_from_solr_using_predicate(Predicate{ And(Eq("height_s","short"),Eq("age_s","old")) })["response"]["docs"].
-              collect{|d|d["id"]} == ["101"] } 
-              
-    assert { get_from_solr_using_predicate(Predicate{ Or(Eq("height_s","short"),Eq("age_s","young")) })["response"]["docs"].
-              collect{|d|d["id"]}.sort == ["101", "103"] } 
-  end
-  
-  test "complex and + or" do
-    assert { get_from_solr_using_predicate(
-          Predicate{ Or(And(Eq("height_s","short"),Eq("age_s","young")),Eq("eye_color_s","red")) })["response"]["docs"].
-          collect{|d|d["id"]}.sort == ["101", "103"] } 
-
-    assert { get_from_solr_using_predicate(
-          Predicate{ Or(And(Eq("height_s","tall"),Eq("age_s","old")),Eq("eye_color_s","green")) })["response"]["docs"].
-          collect{|d|d["id"]}.sort == ["102", "103"] } 
-  end
-
 end
