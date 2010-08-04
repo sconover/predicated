@@ -10,24 +10,13 @@ apropos "parse a ruby predicate string" do
     #'Wrong'-style asserts are specifically avoided here.
     #the circularity between the two projects will make you crazy if you're not careful
     
-    test "simple signs" do
-      assert_equal Predicate.from_ruby_code_string("1==1"), Predicate{ Eq(1,1) }
-      assert_equal Predicate.from_ruby_code_string(" 1 == 1 "), Predicate{ Eq(1,1) }
-      assert_equal Predicate.from_ruby_code_string("0<1"), Predicate{ Lt(0,1) }
-      assert_equal Predicate.from_ruby_code_string("2>1"), Predicate{ Gt(2,1) }
-      assert_equal Predicate.from_ruby_code_string("1<=1"), Predicate{ Lte(1,1) }
-      assert_equal Predicate.from_ruby_code_string("1>=1"), Predicate{ Gte(1,1) }
-    end
-    
     test "primitive types" do
       assert_equal Predicate.from_ruby_code_string("false==true"), Predicate{ Eq(false,true) }
       assert_equal Predicate.from_ruby_code_string("'yyy'=='zzz'"), Predicate{ Eq("yyy","zzz") }
     end
 
-    test "simple and + or" do
-      assert_equal Predicate.from_ruby_code_string("1==1 && 2==2"), Predicate{ And(Eq(1,1),Eq(2,2)) }
+    test "word and" do
       assert_equal Predicate.from_ruby_code_string("1==1 and 2==2"), Predicate{ And(Eq(1,1),Eq(2,2)) }
-      assert_equal Predicate.from_ruby_code_string("1==1 || 2==2"), Predicate{ Or(Eq(1,1),Eq(2,2)) }
     end
 
     class Color
@@ -59,11 +48,6 @@ apropos "parse a ruby predicate string" do
     end
 
 
-    test "complex and + or" do
-      assert_equal Predicate.from_ruby_code_string("1==1 && 2==2 || 3==3"), 
-                   Predicate{ Or( And(Eq(1,1),Eq(2,2)), Eq(3,3) ) }
-    end
-    
     test "parens change precedence" do
       assert_equal Predicate.from_ruby_code_string("1==1 || 2==2 && 3==3"),
                    Predicate{ Or( Eq(1,1), And(Eq(2,2),Eq(3,3)) ) }

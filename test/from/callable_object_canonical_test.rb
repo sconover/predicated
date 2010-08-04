@@ -4,7 +4,7 @@ require "test/canonical_transform_cases"
 require "predicated/from/callable_object"
 include Predicated
 
-apropos "canoical transform cases" do
+apropos "callable object - canoical transform cases" do
   include CanonicalTransformCases
 
   @expectations = {

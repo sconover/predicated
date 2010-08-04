@@ -10,15 +10,6 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
 
   apropos "basic operations" do
 
-    test "simple signs" do
-      assert_equal Predicate.from_callable_object{1==1}, Predicate{ Eq(1,1) }
-      assert_equal Predicate.from_callable_object{1 == 1}, Predicate{ Eq(1,1) }
-      assert_equal Predicate.from_callable_object{0<1}, Predicate{ Lt(0,1) }
-      assert_equal Predicate.from_callable_object{2>1}, Predicate{ Gt(2,1) }
-      assert_equal Predicate.from_callable_object{1<=1}, Predicate{ Lte(1,1) }
-      assert_equal Predicate.from_callable_object{1>=1}, Predicate{ Gte(1,1) }
-    end
-    
     test "primitive types" do
       assert_equal Predicate.from_callable_object{false==true}, Predicate{ Eq(false,true) }
       assert_equal Predicate.from_callable_object{"yyy"=="zzz"}, Predicate{ Eq("yyy","zzz") }
@@ -32,10 +23,8 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
         Predicate{ Eq({1=>2},{"a"=>"b"}) }
     end                                      
                                              
-    test "simple and + or" do                
-      assert_equal Predicate.from_callable_object{1==1 && 2==2}, Predicate{ And(Eq(1,1),Eq(2,2)) }
+    test "word and / or" do                
       assert_equal Predicate.from_callable_object{1==1 and 2==2}, Predicate{ And(Eq(1,1),Eq(2,2)) }
-      assert_equal Predicate.from_callable_object{1==1 || 2==2}, Predicate{ Or(Eq(1,1),Eq(2,2)) }
       assert_equal Predicate.from_callable_object{1==1 or 2==2}, Predicate{ Or(Eq(1,1),Eq(2,2)) }
     end
     
@@ -67,11 +56,6 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
                 Predicate{ And(Eq(1,"1"),Eq("1","c")) }
     end
     
-    
-    test "complex and + or" do
-      assert_equal Predicate.from_callable_object{1==1 && 2==2 || 3==3}, 
-        Predicate{ Or( And(Eq(1,1),Eq(2,2)), Eq(3,3) ) }
-    end
     
     test "parens change precedence" do
       assert_equal Predicate.from_callable_object{1==1 || 2==2 && 3==3}, 
