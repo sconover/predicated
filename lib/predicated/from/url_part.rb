@@ -5,17 +5,17 @@ module Predicated
   require_gem_version("treetop", "1.4.8")
   
   module Predicate
-    def self.from_url_fragment(url_fragment_string)
-      TreetopUrlFragmentParser.new.parse(url_fragment_string).to_predicate
+    def self.from_url_part(url_part)
+      TreetopUrlPartParser.new.parse(url_part).to_predicate
     end
   end
 
-  module TreetopUrlFragment
+  module TreetopUrlPart
     Treetop.load_from_string(%{
 
-grammar TreetopUrlFragment
+grammar TreetopUrlPart
 
-include Predicated::TreetopUrlFragment
+include Predicated::TreetopUrlPart
 
 rule or
   ( and "|" or <OrNode>)  / and
