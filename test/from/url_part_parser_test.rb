@@ -113,4 +113,11 @@ apropos "parse a url part, the result is a parse tree" do
     end
   end
 
+  apropos "not" do
+    test "force precedence" do
+      assert{ @parser.parse("!(a=1)").to_predicate == 
+        Predicate{ Not(Eq("a", "1")) } }
+    end
+  end
+
 end

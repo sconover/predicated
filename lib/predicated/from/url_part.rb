@@ -30,8 +30,13 @@ rule operation
 end
 
 rule parens
-  "(" or ")" <ParensNode>
+  not? "(" or ")" <ParensNode>
 end
+
+rule not
+  '!'
+end
+
 
 
 rule leaf
@@ -86,10 +91,12 @@ end
     end
     
     class ParensNode < Treetop::Runtime::SyntaxNode
-      def inner; elements[1] end
+      def inner; elements[2] end
+      def not?; elements[0].text_value=="!" end
       
       def to_predicate
-        inner.to_predicate
+        inner_predicate = inner.to_predicate
+        not? ? Not.new(inner_predicate) : inner_predicate
       end
     end
     

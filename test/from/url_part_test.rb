@@ -15,6 +15,10 @@ apropos "parse url parts and convert them into predicates" do
       assert { Predicate.from_url_part("a>=1") == Predicate{ Gte("a","1") } }
     end
 
+    test "not" do
+      assert { Predicate.from_url_part("!(a=1)") == Predicate{ Not(Eq("a","1")) } }
+    end
+
     test "simple and + or" do
       assert { Predicate.from_url_part("a=1&b=2") == Predicate{ And(Eq("a","1"),Eq("b","2")) } }
       assert { Predicate.from_url_part("a=1|b=2") == Predicate{ Or(Eq("a","1"),Eq("b","2")) } }
