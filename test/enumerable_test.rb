@@ -23,6 +23,11 @@ apropos "you can flip through the predicate tree, like any enumerable.  a list o
      }
   end
 
+  test "not" do
+    the_top = Predicate { Not(Eq(1, 2)) }
+    assert {  the_top.to_a == [[the_top, []], [Predicate { Eq(1, 2) }, [the_top]]] }
+  end
+    
 end
 
 apropos "there are convenient selectors defined for getting things out of a predicate" do

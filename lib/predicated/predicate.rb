@@ -18,22 +18,16 @@ module Predicated
       @inner = inner
     end    
     
-    # module FlipThroughMe
-    #   def each(ancestors=[], &block)
-    #     yield([self, ancestors])
-    #     ancestors_including_me = ancestors.dup + [self]
-    #     enumerate_side(@left, ancestors_including_me, &block)
-    #     enumerate_side(@right, ancestors_including_me, &block)
-    #   end
-    #   
-    #   private 
-    #   def enumerate_side(thing, ancestors)
-    #     thing.each(ancestors) { |item| yield(item) } if thing.is_a?(Enumerable)
-    #   end
-    # end
-    # include FlipThroughMe
-    # include Enumerable
-    # 
+    module FlipThroughMe
+      def each(ancestors=[], &block)
+        yield([self, ancestors])
+        ancestors_including_me = ancestors.dup + [self]
+        inner.each(ancestors_including_me) { |item| block.call(item) } if inner.is_a?(Enumerable)
+      end
+    end
+    include FlipThroughMe
+    include Enumerable
+    
     module ValueEquality
       def ==(other)
         self.class == other.class && 
