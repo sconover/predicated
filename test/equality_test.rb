@@ -10,6 +10,11 @@ apropos "prove value equality" do
     deny   { Predicate { Eq(1, 1) } == Predicate { Eq(1, 99) } }
   end
   
+  test "unary" do
+    assert { Predicate { Not(Eq(1, 1)) } == Predicate { Not(Eq(1, 1)) } }
+    deny   { Predicate { Not(Eq(1, 1)) } == Predicate { Not(Eq(99, 99)) } }
+  end
+  
   test "complex" do
     assert { Predicate { And(Eq(1, 1), Or(Eq(2, 2), Eq(3, 3))) } ==
              Predicate { And(Eq(1, 1), Or(Eq(2, 2), Eq(3, 3))) } }

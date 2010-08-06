@@ -72,4 +72,11 @@ module Predicated
       boolean_or_evaluate(left) || boolean_or_evaluate(right)
     end 
   end
+
+  class Not
+    include Container
+    def evaluate
+      ! boolean_or_evaluate(inner)
+    end 
+  end
 end

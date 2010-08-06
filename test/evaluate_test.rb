@@ -113,18 +113,30 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
     end
   end  
   
+  apropos "not" do
+    test "simple negation" do
+      assert { Predicate { Not(Eq(3, 2)) }.evaluate }
+      deny   { Predicate { Not(Eq(2, 2)) }.evaluate }
+    end
+
+    test "complex" do
+      assert { Predicate { Not( And(Eq(2, 2),false) ) }.evaluate }
+      deny   { Predicate { Not( And(Eq(2, 2),true) ) }.evaluate }
+    end
+  end  
+  
   apropos "evaluate adds a generic 'call' class.  that is, object.message(args)" do
     test "evaluate simple calls" do
       assert { Predicate { Call("abc", :include?, "bc") }.evaluate }
-      deny { Predicate { Call("abc", :include?, "ZZ") }.evaluate }
+      deny   { Predicate { Call("abc", :include?, "ZZ") }.evaluate }
     end
 
     test "nil call.  call defaults to no args if none are specified" do
       assert { Predicate { Call(nil, :nil?, []) }.evaluate }
-      deny { Predicate { Call("abc", :nil?, []) }.evaluate }
+      deny   { Predicate { Call("abc", :nil?, []) }.evaluate }
 
       assert { Predicate { Call(nil, :nil?) }.evaluate }
-      deny { Predicate { Call("abc", :nil?) }.evaluate }
+      deny   { Predicate { Call("abc", :nil?) }.evaluate }
     end
 
     test "inspect" do
