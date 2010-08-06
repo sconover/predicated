@@ -16,6 +16,16 @@ module Predicated
   class And; include ContainerSentence; def joining_str; " and " end; end
   class Or; include ContainerSentence; def joining_str; " or " end;end
   
+  class Not
+    def to_sentence
+      inner.to_negative_sentence
+    end
+
+    def to_negative_sentence
+      inner.to_sentence
+    end
+  end
+  
   class Operation
 
     def self.register_verb_phrase(method_sym, 

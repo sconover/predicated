@@ -29,6 +29,11 @@ apropos "convert a predicate to an english sentence" do
     assert { Predicate{ Eq("a",true) }.to_sentence == "'a' is equal to true" }
     assert { Predicate{ Eq("a",3.14) }.to_sentence == "'a' is equal to 3.14" }
   end
+
+  test "not" do
+    assert { Predicate{ Not(Eq("a",1)) }.to_sentence == "'a' is not equal to 1" }
+    assert { Predicate{ Not(Eq("a",1)) }.to_negative_sentence == "'a' is equal to 1" }
+  end
   
   test "complex types" do
     assert { Predicate{ Eq([1,2],{3=>4}) }.to_sentence == "'[1, 2]' is equal to '{3=>4}'" }
