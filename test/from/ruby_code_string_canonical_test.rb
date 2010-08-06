@@ -20,6 +20,9 @@ apropos "ruby code string - canoical transform cases" do
       "true" => Predicate.from_ruby_code_string("'a'==true"),
       "string" => Predicate.from_ruby_code_string("'a'=='yyy'"),
     },
+    "not" => {
+      "simple" => Predicate.from_ruby_code_string("!('a'==true)")
+    },
     "simple and / or" => {
       #parens are necessary around AND's in solr in order to force precedence
       "and" => Predicate.from_ruby_code_string("'a'==1 && 'b'==2"),

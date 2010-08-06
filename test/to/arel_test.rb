@@ -52,6 +52,9 @@ apropos "convert a predicate to an arel where clause" do
       "true" => Arel::Predicates::Equality.new(@table.attributes["a"], true),
       "string" => Arel::Predicates::Equality.new(@table.attributes["a"], "yyy")
     },
+    "not" => {
+      "simple" => Arel::Predicates::Not.new(Arel::Predicates::Equality.new(@table.attributes["a"], true))
+    },
     "simple and / or" => {
       "and" => Arel::Predicates::And.new(
                  Arel::Predicates::Equality.new(@table.attributes["a"], 1), 

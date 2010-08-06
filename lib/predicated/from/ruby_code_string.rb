@@ -50,6 +50,9 @@ module Predicated
         elsif first_element == :or
           sym, left, right = sexp
           Or.new(convert(left), convert(right))
+        elsif first_element == :not
+          sym, inner = sexp
+          Not.new(convert(inner))
         else
           raise DontKnowWhatToDoWithThisSexpError.new(sexp)
         end

@@ -20,6 +20,9 @@ apropos "callable object - canoical transform cases" do
       "true" => Predicate.from_callable_object{"a"==true},
       "string" => Predicate.from_callable_object{"a"=="yyy"}
     },
+    "not" => {
+      "simple" => Predicate.from_callable_object{!("a"==true)}
+    },
     "simple and / or" => {
       #parens are necessary around AND's in solr in order to force precedence
       "and" => Predicate.from_callable_object{"a"==1 && "b"==2},

@@ -18,6 +18,12 @@ module Predicated
     end
   end
   
+  class Not
+    def to_arel(arel_table)
+      Arel::Predicates::Not.new(inner.to_arel(arel_table))
+    end
+  end
+  
   
   class Operation
     def to_arel(arel_table)

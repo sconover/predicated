@@ -15,6 +15,9 @@ module CanonicalTransformCases
           "false" => Predicate{ Eq("a",false) },
           "string" => Predicate{ Eq("a","yyy") },
         },
+        "not" => {
+          "simple" => Predicate{ Not(Eq("a",true)) }
+        },
         "simple and / or" => {
           "and" => Predicate{ And(Eq("a", 1),Eq("b", 2)) },
           "or" => Predicate{ Or(Eq("a", 1),Eq("b", 2)) }

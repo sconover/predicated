@@ -14,6 +14,12 @@ module Predicated
     end
   end
   
+  class Not
+    def to_solr
+      "NOT(#{inner.to_solr})"
+    end
+  end
+  
   class Equal
     def to_solr
       "#{left}:#{right}"

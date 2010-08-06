@@ -20,6 +20,9 @@ apropos "convert a predicate to a solr query" do
       "true" => "a:true",
       "string" => "a:yyy"
     },
+    "not" => {
+      "simple" => "NOT(a:true)"
+    },
     "simple and / or" => {
       #parens are necessary around AND's in solr in order to force precedence
       "and" => "(a:1 AND b:2)",
