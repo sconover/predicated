@@ -19,6 +19,7 @@ module CanonicalIntegrationCases
         "simple lt" => { Predicate{ Lt(attrs[:cats], 3) } => [101, 102] },
         "simple gte" => { Predicate{ Gte(attrs[:cats], 2) } => [102, 103] },
         "simple lte" => { Predicate{ Lte(attrs[:cats], 2) } => [101, 102] },
+        "simple not" => { Predicate{ Not(Eq(attrs[:eye_color],"blue")) } => [101, 103] },
         "simple and / or" => {
           Predicate{And(Eq(attrs[:height],"tall"),Eq(attrs[:age],"old"))} => [102],
           Predicate{And(Eq(attrs[:height],"short"),Eq(attrs[:age],"old"))} => [101],
