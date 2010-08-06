@@ -41,6 +41,10 @@ apropos "a predicate looks nice with you inspect it" do
     assert { Predicate { And(Eq(1, 1), Or(Eq(2, 2), Eq(3, 3))) }.inspect == "And(Eq(1,1),Or(Eq(2,2),Eq(3,3)))" }
   end
 
+  test "not" do
+    assert { Predicate { Not(Eq(1, 1)) }.inspect == "Not(Eq(1,1))" }
+  end
+
 end
 
 apropos "to_s is like inspect except it's multiline, so you see the tree structure" do

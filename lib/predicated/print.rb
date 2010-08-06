@@ -1,13 +1,9 @@
 module Predicated
-  class Binary
-    def inspect
-      "#{self.class.shorthand}(#{part_inspect(left)},#{part_inspect(right)})"
-    end
-    
+  module PrintSupport
     def to_s(indent="")
       indent + inspect
     end
-    
+
     private
     def part_inspect(thing)
       part_to_str(thing) {|thing| thing.inspect}
@@ -27,6 +23,20 @@ module Predicated
       else
         "#{thing.class.name}{'#{thing.to_s}'}"
       end
+    end
+  end
+
+  class Unary
+    include PrintSupport
+    def inspect
+      "#{self.class.shorthand}(#{part_inspect(inner)})"
+    end    
+  end
+  
+  class Binary
+    include PrintSupport
+    def inspect
+      "#{self.class.shorthand}(#{part_inspect(left)},#{part_inspect(right)})"
     end
   end
   
