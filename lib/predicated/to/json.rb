@@ -10,26 +10,17 @@ module Predicated
     end
   end
   
-  module ContainerToJson
-    private
-    def inner_to_json_struct
-      [left.to_json_struct, right.to_json_struct]
-    end
-  end
-  
   class And
-    include ContainerToJson
     include JsonStructToJsonStr
     def to_json_struct
-      {"and" => inner_to_json_struct}
+      {"and" => [left.to_json_struct, right.to_json_struct]}
     end
   end
 
   class Or
-    include ContainerToJson
     include JsonStructToJsonStr
     def to_json_struct
-      {"or" => inner_to_json_struct}
+      {"or" => [left.to_json_struct, right.to_json_struct]}
     end
   end
 
@@ -39,7 +30,6 @@ module Predicated
       {"not" => inner.to_json_struct}
     end
   end
-
   
   class Operation
     include JsonStructToJsonStr

@@ -29,7 +29,6 @@ module Predicated
       "#{indent}<not>\n#{inner.to_xml(indent + "  ")}\n#{indent}</not>"
     end
   end
-
   
   class Operation
     def to_xml(indent="")
