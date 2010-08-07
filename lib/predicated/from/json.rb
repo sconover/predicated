@@ -1,5 +1,4 @@
 require "predicated/predicate"
-require "predicated/evaluate"
 
 module Predicated
 
