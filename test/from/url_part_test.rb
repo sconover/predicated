@@ -1,41 +1,48 @@
 require "test/test_helper_with_wrong"
 
 require "predicated/from/url_part"
+require "test/canonical_transform_cases"
 include Predicated
 
 apropos "parse url parts and convert them into predicates" do
+  include CanonicalTransformCases
 
-  apropos "basic operations" do
+  @expectations = {
+    "simple operations" => {
+      "eq" => Predicate.from_url_part("a=3"),
+      "gt" => Predicate.from_url_part("a>3"),
+      "lt" => Predicate.from_url_part("a<3"),
+      "gte" => Predicate.from_url_part("a>=3"),
+      "lte" => Predicate.from_url_part("a<=3")
+    },
+    "primitive types" => {
+      "false" => Predicate.from_url_part("a=false"),
+      "true" => Predicate.from_url_part("a=true"),
+      "string" => Predicate.from_url_part("a=yyy"),
+    },
+    "not" => {
+      "simple" => Predicate.from_url_part("!(a=true)")
+    },
+    "simple and / or" => {
+      #parens are necessary around AND's in solr in order to force precedence
+      "and" => Predicate.from_url_part("a=1&b=2"),
+      "or" => Predicate.from_url_part("a=1|b=2")
+    },
+    "complex and / or" => {
+      "or and" => Predicate.from_url_part("a=1&b=2|c=3")
+    }
+  }
 
-    test "simple signs" do
-      assert { Predicate.from_url_part("a=1") == Predicate{ Eq("a","1") } }
-      assert { Predicate.from_url_part("a<1") == Predicate{ Lt("a","1") } }
-      assert { Predicate.from_url_part("a>1") == Predicate{ Gt("a","1") } }
-      assert { Predicate.from_url_part("a<=1") == Predicate{ Lte("a","1") } }
-      assert { Predicate.from_url_part("a>=1") == Predicate{ Gte("a","1") } }
-    end
+  create_canonical_tests(@expectations, proper_typing=false)
 
-    test "not" do
-      assert { Predicate.from_url_part("!(a=1)") == Predicate{ Not(Eq("a","1")) } }
-    end
 
-    test "simple and + or" do
-      assert { Predicate.from_url_part("a=1&b=2") == Predicate{ And(Eq("a","1"),Eq("b","2")) } }
-      assert { Predicate.from_url_part("a=1|b=2") == Predicate{ Or(Eq("a","1"),Eq("b","2")) } }
-    end
+  
+  test "parens change precedence" do
+    assert { Predicate.from_url_part("a=1|b=2&c=3") == 
+      Predicate{ Or( Eq("a","1"), And(Eq("b","2"),Eq("c","3")) ) } }
 
-    test "complex and + or" do
-      assert { Predicate.from_url_part("a=1&b=2|c=3") == 
-        Predicate{ Or( And(Eq("a","1"),Eq("b","2")), Eq("c","3") ) } }
-    end
-    
-    test "parens change precedence" do
-      assert { Predicate.from_url_part("a=1|b=2&c=3") == 
-        Predicate{ Or( Eq("a","1"), And(Eq("b","2"),Eq("c","3")) ) } }
-
-      assert { Predicate.from_url_part("(a=1|b=2)&c=3") == 
-        Predicate{ And( Or(Eq("a","1"),Eq("b","2")), Eq("c","3") ) } }
-    end
-
+    assert { Predicate.from_url_part("(a=1|b=2)&c=3") == 
+      Predicate{ And( Or(Eq("a","1"),Eq("b","2")), Eq("c","3") ) } }
   end
+
 end
