@@ -19,7 +19,7 @@ apropos "prove value equality" do
     assert { Predicate { And(Eq(1, 1), Or(Eq(2, 2), Eq(3, 3))) } ==
              Predicate { And(Eq(1, 1), Or(Eq(2, 2), Eq(3, 3))) } }
     
-    deny {   Predicate { And(Eq(1, 1), Or(Eq(2, 2), Eq(3, 3))) } ==
+    deny   { Predicate { And(Eq(1, 1), Or(Eq(2, 2), Eq(3, 3))) } ==
              Predicate { And(Eq(1, 1), Or(Eq(2, 99), Eq(3, 3))) } }
   end
 

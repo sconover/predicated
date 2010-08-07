@@ -140,14 +140,14 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
     end
 
     test "inspect" do
-      assert{ Call.new("abc", :include?, "bc").inspect == "Call('abc'.include?('bc'))" }
+      assert { Call.new("abc", :include?, "bc").inspect == "Call('abc'.include?('bc'))" }
     end
     
     test "call equality" do
       assert { Call.new("abc", :include?, "bc") == Call.new("abc", :include?, "bc") }
-      deny { Call.new("ZZZ", :include?, "bc") == Call.new("abc", :include?, "bc") }
-      deny { Call.new("abc", :zzz, "bc") == Call.new("abc", :include?, "bc") }
-      deny { Call.new("abc", :include?, "ZZZ") == Call.new("abc", :include?, "bc") }
+      deny   { Call.new("ZZZ", :include?, "bc") == Call.new("abc", :include?, "bc") }
+      deny   { Call.new("abc", :zzz, "bc") == Call.new("abc", :include?, "bc") }
+      deny   { Call.new("abc", :include?, "ZZZ") == Call.new("abc", :include?, "bc") }
     end
     
 
