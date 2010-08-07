@@ -1,29 +1,39 @@
 module CanonicalTransformCases
   
   module ClassMethods
-    def create_canonical_tests(expectations)
+    def create_canonical_tests(expectations, proper_typing=true)
+      val = {
+        :one => 1,
+        :two => 2,
+        :three => 3,
+        :true_value => true,
+        :false_value => false
+      }
+      
+      val.each{|k,v|val[k]=v.to_s} unless proper_typing
+      
       tests = {
         "simple operations" => {
-          "eq" => Predicate{ Eq("a",3) },
-          "gt" => Predicate{ Gt("a",3) },
-          "lt" => Predicate{ Lt("a",3) },
-          "gte" => Predicate{ Gte("a",3) },
-          "lte" => Predicate{ Lte("a",3) }
+          "eq" => Predicate{ Eq("a",val[:three]) },
+          "gt" => Predicate{ Gt("a",val[:three]) },
+          "lt" => Predicate{ Lt("a",val[:three]) },
+          "gte" => Predicate{ Gte("a",val[:three]) },
+          "lte" => Predicate{ Lte("a",val[:three]) }
         },
         "primitive types" => {
-          "true" => Predicate{ Eq("a",true) },
-          "false" => Predicate{ Eq("a",false) },
+          "true" => Predicate{ Eq("a",val[:true_value]) },
+          "false" => Predicate{ Eq("a",val[:false_value]) },
           "string" => Predicate{ Eq("a","yyy") },
         },
         "not" => {
-          "simple" => Predicate{ Not(Eq("a",true)) }
+          "simple" => Predicate{ Not(Eq("a",val[:true_value])) }
         },
         "simple and / or" => {
-          "and" => Predicate{ And(Eq("a", 1),Eq("b", 2)) },
-          "or" => Predicate{ Or(Eq("a", 1),Eq("b", 2)) }
+          "and" => Predicate{ And(Eq("a", val[:one]),Eq("b", val[:two])) },
+          "or" => Predicate{ Or(Eq("a", val[:one]),Eq("b", val[:two])) }
         },
         "complex and / or" => {
-          "or and" => Predicate{ Or(And(Eq("a", 1),Eq("b", 2)), Eq("c",3)) } 
+          "or and" => Predicate{ Or(And(Eq("a", val[:one]),Eq("b", val[:two])), Eq("c",val[:three])) } 
         }
       }
   
