@@ -31,10 +31,12 @@ Parse a predicate from part of a url and then turn it into a sql where clause
     require "predicated/to/arel"
         
     predicate = Predicated::Predicate.from_url_part("(color=red|color=green)&size=large")
+    
     predicate.inspect == 
-    "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+      "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+    
     predicate.to_arel(Table(:shirt)).to_sql == 
-    %{(("shirt"."color" = 'red' OR "shirt"."color" = 'green') AND "shirt"."size" = 'large')} 
+      %{(("shirt"."color" = 'red' OR "shirt"."color" = 'green') AND "shirt"."size" = 'large')} 
   
 
 Parse a predicate from json and then turn it into a solr query string
@@ -45,7 +47,9 @@ Parse a predicate from json and then turn it into a solr query string
     predicate = Predicated::Predicate.from_json_str(%{
       {"and":[{"or":[["color","==","red"],["color","==","green"]]},["size","==","large"]]}
     })
+        
     predicate.inspect == "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+        
     predicate.to_solr == "((color:red OR color:green) AND size:large)" 
 
   
@@ -165,7 +169,6 @@ To: sentence
     
     Predicate{ Gt("a",1) }.to_negative_sentence == 
       "'a' is not greater than 1" 
-	
 
 
 ## Testing Notes ##

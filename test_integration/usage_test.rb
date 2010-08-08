@@ -30,13 +30,15 @@ apropos "prove out examples used in the README" do
     require "predicated/to/arel"
         
     predicate = Predicated::Predicate.from_url_part("(color=red|color=green)&size=large")
+    
     assert{ 
     predicate.inspect == 
-    "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+      "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
     }
+    
     assert{ 
     predicate.to_arel(Table(:shirt)).to_sql == 
-    %{(("shirt"."color" = 'red' OR "shirt"."color" = 'green') AND "shirt"."size" = 'large')} 
+      %{(("shirt"."color" = 'red' OR "shirt"."color" = 'green') AND "shirt"."size" = 'large')} 
     }
   end
   
@@ -49,9 +51,11 @@ apropos "prove out examples used in the README" do
     predicate = Predicated::Predicate.from_json_str(%{
       {"and":[{"or":[["color","==","red"],["color","==","green"]]},["size","==","large"]]}
     })
+        
     assert{ 
     predicate.inspect == "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
     }
+        
     assert{ 
     predicate.to_solr == "((color:red OR color:green) AND size:large)" 
     }
@@ -207,7 +211,7 @@ apropos "prove out examples used in the README" do
     }    
   end
   
-  xtest "format and puts me" do
+  test "format and puts me" do
     lines = File.read(__FILE__).split("\n")
     lines =
       lines.reject do |line|
