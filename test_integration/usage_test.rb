@@ -1,43 +1,47 @@
-## Abstract ##
+require "test/test_helper_with_wrong"
 
-Predicated is a simple predicate model for Ruby.  It provides useful predicate transformations and operations.
+require "predicated/to/arel"
+require "sqlite3"
+require "active_record"
 
-Tracker project:
-[http://www.pivotaltracker.com/projects/95014](http://www.pivotaltracker.com/projects/95014)
-
-## Transformations ##
-
-- From:
-  - json
-  - xml
-  - url part, ex: "!(a=1&b=2|c=3)"
-  - callable objects (lambdas/procs, and therefore blocks) - ruby 1.8.x only
-  - ruby code - ruby 1.8.x only
-- To:
-  - json
-  - xml
-  - sql where clause via [arel](http://github.com/rails/arel)
-  - [solr](http://lucene.apache.org/solr/) query string
-  - english sentence, ex: "'a' is not equal to 'b'"
-
-## Usage ##
-
-Note: The test suite acts as a comprehensive usage guide.
-
-
-Parse a predicate from part of a url and then turn it into a sql where clause
+apropos "prove out examples used in the README" do
+  
+  before do
+    unless @created
+      db_file = "/tmp/sqlite_db"
+      FileUtils.rm_f(db_file)
+      @db = SQLite3::Database.new(db_file)
+      ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database  => db_file)
+      @db.execute(%{
+        create table shirt (
+          id INTEGER PRIMARY KEY, 
+          color VARCHAR(25), 
+          size VARCHAR(25)
+        );
+      })      
+    end
+    @created = true    
+  end  
+  
+  
+  test "Parse a predicate from part of a url and then turn it into a sql where clause" do
     
     require "predicated/from/url_part"
     require "predicated/to/arel"
         
     predicate = Predicated::Predicate.from_url_part("(color=red|color=green)&size=large")
+    assert{ 
     predicate.inspect == 
     "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+    }
+    assert{ 
     predicate.to_arel(Table(:shirt)).to_sql == 
     %{(("shirt"."color" = 'red' OR "shirt"."color" = 'green') AND "shirt"."size" = 'large')} 
+    }
+  end
   
 
-Parse a predicate from json and then turn it into a solr query string
+  test "Parse a predicate from json and then turn it into a solr query string" do
     
     require "predicated/from/json"
     require "predicated/to/solr"
@@ -45,14 +49,20 @@ Parse a predicate from json and then turn it into a solr query string
     predicate = Predicated::Predicate.from_json_str(%{
       {"and":[{"or":[["color","==","red"],["color","==","green"]]},["size","==","large"]]}
     })
+    assert{ 
     predicate.inspect == "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+    }
+    assert{ 
     predicate.to_solr == "((color:red OR color:green) AND size:large)" 
+    }
+  end
 
   
-From: json
+  test "From: json" do
     
     require "predicated/from/json"
         
+    assert{ 
     Predicated::Predicate.from_json_str(%{
       {"and":[
         {"or":[
@@ -62,12 +72,15 @@ From: json
         ["size","==","large"]
       ]}
     }).inspect == "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+    }
+  end
 
 
-From: xml
+  test "From: xml" do
     
     require "predicated/from/xml"
         
+    assert{ 
     Predicated::Predicate.from_xml(%{
       <and>
         <or>
@@ -77,38 +90,50 @@ From: xml
         <equal><left>size</left><right>large</right></equal>
       </and>
     }).inspect == "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+    }
+  end
 
 
-From: url part
+  test "From: url part" do
     
     require "predicated/from/url_part"
         
+    assert{ 
     Predicated::Predicate.from_url_part("(color=red|color=green)&size=large").inspect ==
       "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+    }
+  end
 
 
-From: callable object
+  test "From: callable object" do
     
     require "predicated/from/callable_object"
         
+    assert{ 
     Predicated::Predicate.from_callable_object{('color'=='red' || 'color'=='green') && 'size'=='large'}.inspect ==
       "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+    }
+  end
 
 
-From: ruby code string
+  test "From: ruby code string" do
       
     require "predicated/from/ruby_code_string"
             
+    assert{ 
     Predicated::Predicate.from_ruby_code_string("('color'=='red' || 'color'=='green') && 'size'=='large'").inspect ==
       "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
+    }
+  end
   
   
-To: json
+  test "To: json" do
       
     require "predicated/to/json"
-    include Predicated
+    extend Predicated #include Predicated
             
-    Predicate{And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))}.to_json_str ==
+    assert{ 
+    Predicate{And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))}.to_json_str.gsub(/\s/, "") ==
     %{
       {"and":[
         {"or":[
@@ -117,15 +142,18 @@ To: json
         ]},
         ["size","==","large"]
       ]}
+    }.gsub(/\s/, "")
     }
+  end
   
   
-To: xml
+  test "To: xml" do
       
     require "predicated/to/xml"
-    include Predicated
+    extend Predicated #include Predicated
             
-    Predicate{And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))}.to_xml ==
+    assert{ 
+    Predicate{And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))}.to_xml.gsub(/\s/, "") ==
     %{
       <and>
         <or>
@@ -134,42 +162,64 @@ To: xml
         </or>
         <equal><left>size</left><right>large</right></equal>
       </and>      
+    }.gsub(/\s/, "")
     }
+  end
   
   
-To: arel (sql where clause)
+  test "To: arel (sql where clause)" do
       
     require "predicated/to/arel"
-    include Predicated
+    extend Predicated #include Predicated
             
+    assert{ 
     Predicate{And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))}.to_arel(Table(:shirt)).to_sql ==
       %{(("shirt"."color" = 'red' OR "shirt"."color" = 'green') AND "shirt"."size" = 'large')}
+    }
+  end
   
   
-To: solr query string
+  test "To: solr query string" do
       
     require "predicated/to/solr"
-    include Predicated
+    extend Predicated #include Predicated
             
+    assert{ 
     Predicate{And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))}.to_solr ==
       "((color:red OR color:green) AND size:large)"
+    }
+  end
   
   
-To: sentence
+  test "To: sentence" do
       
     require "predicated/to/sentence"
-    include Predicated
+    extend Predicated #include Predicated
         
+    assert{
     Predicate{ And(Eq("a",1),Eq("b",2)) }.to_sentence == 
       "'a' is equal to 1 and 'b' is equal to 2"
+    }
     
+    assert { 
     Predicate{ Gt("a",1) }.to_negative_sentence == 
       "'a' is not greater than 1" 
-	
-
-
-## Testing Notes ##
-
-Right now this project makes use of Wrong for assertions.  Wrong uses this project.  It's kind of neat in an eat-your-own-dogfood sense, but it's possible that this will be problematic over time (particularly when changes in this project cause assertions to behave differently - if even temporarily).
-
-A middle ground is to make "from ruby string" and "from callable object" use minitest asserts, since these are the "interesting" parts of Predicated relied on by Wrong.
+    }    
+  end
+  
+  xtest "format and puts me" do
+    lines = File.read(__FILE__).split("\n")
+    lines =
+      lines.reject do |line|
+        line.include?("assert") || line =~ /^[ ]*\}[ ]*$/ || line =~ /^[ ]*end[ ]*$/
+      end
+    str = lines.join("\n")
+    
+    puts str.
+      gsub("  test \"", "").
+      gsub("\" do", "").
+      gsub("extend Predicated #include Predicated", "include Predicated").
+      gsub(%{.gsub(/\\s/, "")}, "")
+  end
+  
+end
