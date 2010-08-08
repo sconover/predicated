@@ -24,6 +24,28 @@ apropos "prove out examples used in the README" do
   end  
   
   
+  test "Evaluate a predicate" do
+    
+    require "predicated/evaluate"
+    extend Predicated #include Predicated
+            
+    assert{
+    Predicate { Eq(1, 2) }.evaluate == false
+    }
+    assert{
+    Predicate { Lt(1, 2) }.evaluate == true
+    }
+    assert{
+    Predicate { Or(Lt(1, 2),Eq(1, 2)) }.evaluate == true
+    }
+    
+    assert{
+    x = 1
+    Predicate { Lt(x, 2) }.evaluate == true
+    }
+  end
+
+
   test "Parse a predicate from part of a url and then turn it into a sql where clause" do
     
     require "predicated/from/url_part"

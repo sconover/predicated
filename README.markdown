@@ -25,6 +25,19 @@ Tracker project:
 Note: The test suite acts as a comprehensive usage guide.
 
 
+Evaluate a predicate:
+    
+    require "predicated/evaluate"
+    include Predicated
+            
+    Predicate { Eq(1, 2) }.evaluate == false
+    Predicate { Lt(1, 2) }.evaluate == true
+    Predicate { Or(Lt(1, 2),Eq(1, 2)) }.evaluate == true
+    
+    x = 1
+    Predicate { Lt(x, 2) }.evaluate == true
+
+
 Parse a predicate from part of a url and then turn it into a sql where clause:
     
     require "predicated/from/url_part"
