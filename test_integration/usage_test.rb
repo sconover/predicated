@@ -62,7 +62,7 @@ apropos "prove out examples used in the README" do
   end
 
   
-  test "From: json" do
+  test "From json" do
     
     require "predicated/from/json"
         
@@ -80,7 +80,7 @@ apropos "prove out examples used in the README" do
   end
 
 
-  test "From: xml" do
+  test "From xml" do
     
     require "predicated/from/xml"
         
@@ -98,7 +98,7 @@ apropos "prove out examples used in the README" do
   end
 
 
-  test "From: url part" do
+  test "From url part" do
     
     require "predicated/from/url_part"
         
@@ -109,7 +109,7 @@ apropos "prove out examples used in the README" do
   end
 
 
-  test "From: callable object" do
+  test "From callable object" do
     
     require "predicated/from/callable_object"
         
@@ -120,7 +120,7 @@ apropos "prove out examples used in the README" do
   end
 
 
-  test "From: ruby code string" do
+  test "From ruby code string" do
       
     require "predicated/from/ruby_code_string"
             
@@ -131,7 +131,7 @@ apropos "prove out examples used in the README" do
   end
   
   
-  test "To: json" do
+  test "To json" do
       
     require "predicated/to/json"
     extend Predicated #include Predicated
@@ -151,7 +151,7 @@ apropos "prove out examples used in the README" do
   end
   
   
-  test "To: xml" do
+  test "To xml" do
       
     require "predicated/to/xml"
     extend Predicated #include Predicated
@@ -171,7 +171,7 @@ apropos "prove out examples used in the README" do
   end
   
   
-  test "To: arel (sql where clause)" do
+  test "To arel (sql where clause)" do
       
     require "predicated/to/arel"
     extend Predicated #include Predicated
@@ -183,7 +183,7 @@ apropos "prove out examples used in the README" do
   end
   
   
-  test "To: solr query string" do
+  test "To solr query string" do
       
     require "predicated/to/solr"
     extend Predicated #include Predicated
@@ -195,7 +195,7 @@ apropos "prove out examples used in the README" do
   end
   
   
-  test "To: sentence" do
+  test "To sentence" do
       
     require "predicated/to/sentence"
     extend Predicated #include Predicated
@@ -211,7 +211,7 @@ apropos "prove out examples used in the README" do
     }    
   end
   
-  test "format and puts me" do
+  xtest "format and puts me" do
     lines = File.read(__FILE__).split("\n")
     lines =
       lines.reject do |line|
@@ -221,7 +221,7 @@ apropos "prove out examples used in the README" do
     
     puts str.
       gsub("  test \"", "").
-      gsub("\" do", "").
+      gsub("\" do", ":").
       gsub("extend Predicated #include Predicated", "include Predicated").
       gsub(%{.gsub(/\\s/, "")}, "")
   end

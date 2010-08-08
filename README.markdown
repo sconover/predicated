@@ -25,7 +25,7 @@ Tracker project:
 Note: The test suite acts as a comprehensive usage guide.
 
 
-Parse a predicate from part of a url and then turn it into a sql where clause
+Parse a predicate from part of a url and then turn it into a sql where clause:
     
     require "predicated/from/url_part"
     require "predicated/to/arel"
@@ -39,7 +39,7 @@ Parse a predicate from part of a url and then turn it into a sql where clause
       %{(("shirt"."color" = 'red' OR "shirt"."color" = 'green') AND "shirt"."size" = 'large')} 
   
 
-Parse a predicate from json and then turn it into a solr query string
+Parse a predicate from json and then turn it into a solr query string:
     
     require "predicated/from/json"
     require "predicated/to/solr"
@@ -53,7 +53,7 @@ Parse a predicate from json and then turn it into a solr query string
     predicate.to_solr == "((color:red OR color:green) AND size:large)" 
 
   
-From: json
+From json:
     
     require "predicated/from/json"
         
@@ -68,7 +68,7 @@ From: json
     }).inspect == "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
 
 
-From: xml
+From xml:
     
     require "predicated/from/xml"
         
@@ -83,7 +83,7 @@ From: xml
     }).inspect == "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
 
 
-From: url part
+From url part:
     
     require "predicated/from/url_part"
         
@@ -91,7 +91,7 @@ From: url part
       "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
 
 
-From: callable object
+From callable object:
     
     require "predicated/from/callable_object"
         
@@ -99,7 +99,7 @@ From: callable object
       "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
 
 
-From: ruby code string
+From ruby code string:
       
     require "predicated/from/ruby_code_string"
             
@@ -107,7 +107,7 @@ From: ruby code string
       "And(Or(Eq('color','red'),Eq('color','green')),Eq('size','large'))" 
   
   
-To: json
+To json:
       
     require "predicated/to/json"
     include Predicated
@@ -124,7 +124,7 @@ To: json
     }
   
   
-To: xml
+To xml:
       
     require "predicated/to/xml"
     include Predicated
@@ -141,7 +141,7 @@ To: xml
     }
   
   
-To: arel (sql where clause)
+To arel (sql where clause):
       
     require "predicated/to/arel"
     include Predicated
@@ -150,7 +150,7 @@ To: arel (sql where clause)
       %{(("shirt"."color" = 'red' OR "shirt"."color" = 'green') AND "shirt"."size" = 'large')}
   
   
-To: solr query string
+To solr query string:
       
     require "predicated/to/solr"
     include Predicated
@@ -159,7 +159,7 @@ To: solr query string
       "((color:red OR color:green) AND size:large)"
   
   
-To: sentence
+To sentence:
       
     require "predicated/to/sentence"
     include Predicated
