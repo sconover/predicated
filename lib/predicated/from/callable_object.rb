@@ -25,7 +25,7 @@ get out of "from_callable_object" makes it all worth it.
 
 module Predicated
   
-  require_gem_version("ParseTree", "3.0.5", "parse_tree")
+  require_gem_version("ParseTree", "3.0.5", "parse_tree") if RUBY_VERSION < "1.9"
   
   module Predicate
 

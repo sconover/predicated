@@ -1,5 +1,5 @@
 require "predicated/gem_check"
-require "predicated/selector"
+require "predicated/selectable"
 
 module Predicated
   def Predicate(&block)
@@ -74,7 +74,7 @@ module Predicated
   class Operation < Binary; end
   
   module Predicate
-    extend Predicated::Selector
+    extend Predicated::Selectable
     
     CLASS_INFO = [
       [:And, :And, Class.new(Binary)],
@@ -87,15 +87,13 @@ module Predicated
       [:GreaterThanOrEqualTo, :Gte, Class.new(Operation)]
     ]
     
-    #not great
-    base_selector_enumerable = SelectorEnumerable( 
+    selectors =
       (CLASS_INFO.collect{|class_sym, sh, class_obj|class_obj} + [Unary, Binary, Operation]).
         inject({:all => proc{|predicate, enumerable|true}}) do |h, class_obj|
           h[class_obj] = proc{|predicate, enumerable|predicate.is_a?(class_obj)}
           h
-        end 
-    )
-    
+        end
+
     CLASS_INFO.each do |operation_class_name, shorthand, class_object|
       Predicated.const_set(operation_class_name, class_object)
       class_object.instance_variable_set("@shorthand".to_sym, shorthand)
@@ -105,7 +103,8 @@ module Predicated
           @shorthand
         end
         
-        include base_selector_enumerable
+        include Selectable
+        selector selectors
       end
       
       if class_object.ancestors.include?(Unary)

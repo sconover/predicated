@@ -29,7 +29,11 @@ apropos "a predicate looks nice with you inspect it" do
   end
     
   test "objects" do
-    assert { Predicate { Eq(Color.new("red"), Color.new("blue")) }.inspect == "Eq(Color{'name:red'},Color{'name:blue'})" }
+    assert {
+      Predicate {
+        Eq(Color.new("red"), Color.new("blue"))
+      }.inspect == "Eq(Color{'name:red'},Color{'name:blue'})"
+    }
   end
   
   test "and, or" do
