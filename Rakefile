@@ -1,4 +1,6 @@
 require "rubygems"
+require "bundler"
+Bundler.setup
 
 def gemspec
   @gemspec ||= begin
@@ -7,6 +9,7 @@ def gemspec
   end
 end
 
+task :default => :test
 
 desc 'run all tests'
 task :test do
