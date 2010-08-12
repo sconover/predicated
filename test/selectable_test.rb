@@ -62,6 +62,8 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
       include Predicated::Selectable
       selector :strings => proc{|item|item.is_a?(String)}
       selector :numbers => proc{|item|item.is_a?(Numeric)}
+      selector :small => proc{|item|item.is_a?(Numeric) && item < 3},
+        :big => proc{|item|item.is_a?(Numeric) && item >= 3}
     end
     
     arr = MyArray.new
@@ -69,6 +71,8 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
 
     assert{ arr.select(:strings) == ["c","e"] }
     assert{ arr.select(:numbers) == [1,2,4,6] }
+    assert{ arr.select(:small) == [1,2] }
+    assert{ arr.select(:big) == [4,6] }
   end
     
   test %{memoizes.

@@ -1,5 +1,7 @@
 
 class Object
+  # todo: make this definition conditional
+  # todo: move this to a monkey patch file
   def singleton_class
      class << self
        self
@@ -9,10 +11,9 @@ end
 
 module Predicated
   module Selectable
-    #this is no doubt totally non-performant with all the extends, and 
-    #could probably be just done better / more elegantly
-    #seek help.
-
+    # Make an Enumerable instance into a Selectable. 
+    # This does for instances what "include Selectable" does for classes.
+    # todo: rename?
     def self.bless_enumerable(enumerable, selectors)
       enumerable.singleton_class.instance_eval do
         include Selectable
@@ -20,7 +21,18 @@ module Predicated
       end
     end
 
-    SELECTORS_INSTANCE_VARIABLE_NAME = :@selectors
+    # merge several hashes into one, skipping nils
+    # todo: unit test
+    # todo: move onto Hash?
+    def self.merge_many(*hashes)
+      result = {}
+      hashes.compact.each do |hash|
+        result.merge! hash
+      end
+      result
+    end
+
+    SELECTORS = :@_predicated_selectors
 
     def self.included(base)
       base.extend ClassMethods
@@ -28,18 +40,15 @@ module Predicated
 
     module ClassMethods
       def selector(hash)
-        sym = SELECTORS_INSTANCE_VARIABLE_NAME
-        existing = instance_variable_get(sym) || {}
-        instance_variable_set(sym, existing.merge(hash))
+        instance_variable_set(SELECTORS, Selectable.merge_many(instance_variable_get(SELECTORS), hash))
       end
     end
 
     def selectors
-      sym = SELECTORS_INSTANCE_VARIABLE_NAME
-      class_selectors = self.class.instance_variable_get(sym) || {}
-      singleton_selectors = self.singleton_class.instance_variable_get(sym) || {}
-      instance_selectors = self.instance_variable_get(sym) || {}
-      class_selectors.merge(singleton_selectors).merge(instance_selectors)
+      class_selectors = self.class.instance_variable_get(SELECTORS)
+      singleton_selectors = self.singleton_class.instance_variable_get(SELECTORS)
+      instance_selectors = self.instance_variable_get(SELECTORS)
+      Selectable.merge_many(class_selectors, singleton_selectors, instance_selectors)
     end
 
     def select(*keys, &block)
@@ -59,6 +68,7 @@ module Predicated
           end
 
         Selectable.bless_enumerable(result, selectors)
+
         if keys.length >= 1
           result.select(*keys, &block)
         else
@@ -69,8 +79,8 @@ module Predicated
 
     private
     def memos_for(group)
-      @memos ||= {}
-      @memos[group] ||= {}
+      @_predicated_memos ||= {}
+      @_predicated_memos[group] ||= {}
     end
   end
 
