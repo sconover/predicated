@@ -1,8 +1,9 @@
-require "test/test_helper_with_wrong"
+require "./test/test_helper_with_wrong"
 
 require "predicated/to/arel"
 require "sqlite3"
 require "active_record"
+require "fileutils"
 
 apropos "prove out examples used in the README" do
   

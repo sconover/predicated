@@ -1,6 +1,10 @@
-require "test/test_helper_with_wrong"
-require "test/canonical_transform_cases"
+require "./test/test_helper_with_wrong"
+require "./test/canonical_transform_cases"
 
+if RUBY_VERSION =~/^1.9/
+  puts "skipping callable object-related tests in 1.9"
+else
+  
 require "predicated/from/callable_object"
 include Predicated
 
@@ -34,4 +38,6 @@ apropos "callable object - canoical transform cases" do
   }
 
   create_canonical_tests(@expectations)
+end
+
 end

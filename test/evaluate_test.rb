@@ -1,4 +1,4 @@
-require "test/test_helper_with_wrong"
+require "./test/test_helper_with_wrong"
 
 require "predicated/evaluate"
 include Predicated

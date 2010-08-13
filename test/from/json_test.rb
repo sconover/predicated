@@ -1,7 +1,7 @@
-require "test/test_helper_with_wrong"
+require "./test/test_helper_with_wrong"
 
 require "predicated/from/json"
-require "test/canonical_transform_cases"
+require "./test/canonical_transform_cases"
 include Predicated
 
 apropos "convert a json string to a predicate" do

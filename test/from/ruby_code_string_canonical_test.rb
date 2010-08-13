@@ -1,7 +1,7 @@
-require "test/test_helper_with_wrong"
-require "test/canonical_transform_cases"
+require "./test/test_helper_with_wrong"
+require "./test/canonical_transform_cases"
 
-require "predicated/from/callable_object"
+require "predicated/from/ruby_code_string"
 include Predicated
 
 apropos "ruby code string - canoical transform cases" do

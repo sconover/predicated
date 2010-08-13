@@ -1,12 +1,15 @@
-require "test/test_helper"
-require "test/canonical_transform_cases"
+require "./test/test_helper"
+require "./test/canonical_transform_cases"
+
+
+if RUBY_VERSION =~/^1.9/
+  puts "skipping callable object-related tests in 1.9"
+else
 
 require "predicated/from/callable_object"
 include Predicated
-
+  
 apropos "convert a ruby callable object - a proc or lambda - into a predicate" do
-
-
 
   apropos "basic operations" do
                                              
@@ -70,4 +73,6 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
       end
     end
   end
+end
+
 end

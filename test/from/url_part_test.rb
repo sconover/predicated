@@ -1,7 +1,7 @@
-require "test/test_helper_with_wrong"
+require "./test/test_helper_with_wrong"
 
 require "predicated/from/url_part"
-require "test/canonical_transform_cases"
+require "./test/canonical_transform_cases"
 include Predicated
 
 apropos "parse url parts and convert them into predicates" do

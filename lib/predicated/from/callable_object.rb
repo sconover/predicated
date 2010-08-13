@@ -1,6 +1,15 @@
 require "predicated/predicate"
 require "predicated/from/ruby_code_string"
 
+
+raise %{
+
+This will never work in ruby 1.9.
+
+see http://blog.zenspider.com/2009/04/parsetree-eol.html
+  
+} if RUBY_VERSION =~/^1.9/
+
 raise %{
   
 You appear to be using ruby 1.8.7 and you don't have 

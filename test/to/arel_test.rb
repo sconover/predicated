@@ -1,5 +1,5 @@
-require "test/test_helper_with_wrong"
-require "test/canonical_transform_cases"
+require "./test/test_helper_with_wrong"
+require "./test/canonical_transform_cases"
 
 unless RUBY_VERSION=="1.8.6"
   

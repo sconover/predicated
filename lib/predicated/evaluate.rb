@@ -12,7 +12,8 @@ module Predicated
     end    
 
     def evaluate
-      left.send(@method_sym, *right)
+      right_values = right.nil? ? [nil] : right #1.9 problem where nils and varargs don't play nicely
+      left.send(@method_sym, *right_values)
     end
     
     def ==(other)

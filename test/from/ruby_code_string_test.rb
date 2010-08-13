@@ -1,4 +1,4 @@
-require "test/test_helper"
+require "./test/test_helper"
 
 require "predicated/from/ruby_code_string"
 include Predicated

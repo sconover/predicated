@@ -1,5 +1,5 @@
-require "test/test_helper_with_wrong"
-require "test_integration/canonical_integration_cases"
+require "./test/test_helper_with_wrong"
+require "./test_integration/canonical_integration_cases"
 require "net/http"
 require "open-uri"
 
