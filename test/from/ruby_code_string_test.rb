@@ -14,17 +14,6 @@ apropos "parse a ruby predicate string" do
       assert_equal Predicate.from_ruby_code_string("1==1 and 2==2"), Predicate{ And(Eq(1,1),Eq(2,2)) }
     end
 
-    class Color
-      attr_reader :name
-      def initialize(name)
-        @name = name
-      end
-    
-      def ==(other)
-        other.is_a?(Color) && @name == other.name
-      end
-    end
-
     test "substitute in from the binding" do
       a = 1
       b = "1"

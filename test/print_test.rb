@@ -17,17 +17,6 @@ apropos "a predicate looks nice with you inspect it" do
     assert { Predicate { Eq("foo", "bar") }.inspect == "Eq('foo','bar')" }
   end
 
-  class Color
-    attr_reader :name
-    def initialize(name)
-      @name = name
-    end
-  
-    def to_s
-      "name:#{@name}"
-    end
-  end
-    
   test "objects" do
     assert {
       Predicate {

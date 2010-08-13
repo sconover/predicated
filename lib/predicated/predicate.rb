@@ -5,7 +5,7 @@ module Predicated
   def Predicate(&block)
     result = nil
     Module.new do
-      extend Predicate      
+      extend Predicate
       result = instance_eval(&block)
     end
     result

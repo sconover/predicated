@@ -31,7 +31,7 @@ apropos "you can flip through the predicate tree, like any enumerable.  a list o
 end
 
 apropos "there are convenient selectors defined for getting things out of a predicate" do
-  class Array
+  class ::Array
     def predicates
       collect{|p, a|p}
     end

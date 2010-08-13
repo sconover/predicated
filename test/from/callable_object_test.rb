@@ -22,18 +22,7 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
       assert_equal Predicate.from_callable_object{1==1 and 2==2}, Predicate{ And(Eq(1,1),Eq(2,2)) }
       assert_equal Predicate.from_callable_object{1==1 or 2==2}, Predicate{ Or(Eq(1,1),Eq(2,2)) }
     end
-    
-    class Color
-      attr_reader :name
-      def initialize(name)
-        @name = name
-      end
-    
-      def ==(other)
-        other.is_a?(Color) && @name == other.name
-      end
-    end
-    
+        
     test "substitute in from the binding" do
       a = 1
       b = "1"

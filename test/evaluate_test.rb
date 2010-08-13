@@ -62,17 +62,6 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
       deny   { Predicate { Eq(1, nil) }.evaluate }
     end
 
-    class Color
-      attr_reader :name
-      def initialize(name)
-        @name = name
-      end
-    
-      def ==(other)
-        other.is_a?(Color) && @name == other.name
-      end
-    end
-
     test "objects" do
       assert { Predicate { Eq(Color.new("red"), Color.new("red")) }.evaluate }
       deny   { Predicate { Eq(Color.new("red"), Color.new("BLUE")) }.evaluate }
