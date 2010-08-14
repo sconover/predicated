@@ -1,11 +1,10 @@
 require "predicated/gem_check"
-require "predicated/selectable"
 
 module Predicated
   def Predicate(&block)
     result = nil
     Module.new do
-      extend Predicate
+      extend Shorthand
       result = instance_eval(&block)
     end
     result
@@ -71,57 +70,39 @@ module Predicated
     include ValueEquality
   end
   
+  
+  
+  
+  class And < Binary; def self.shorthand; :And end end
+  class Or < Binary; def self.shorthand; :Or end end
+  class Not < Unary; def self.shorthand; :Not end end
+
+  
   class Operation < Binary; end
   
-  module Predicate
-    extend Predicated::Selectable
-    
-    CLASS_INFO = [
-      [:And, :And, Class.new(Binary)],
-      [:Or, :Or, Class.new(Binary)],
-      [:Not, :Not, Class.new(Unary)],
-      [:Equal, :Eq, Class.new(Operation)],
-      [:LessThan, :Lt, Class.new(Operation)],
-      [:GreaterThan, :Gt, Class.new(Operation)],
-      [:LessThanOrEqualTo, :Lte, Class.new(Operation)],
-      [:GreaterThanOrEqualTo, :Gte, Class.new(Operation)]
-    ]
-    
-    selectors =
-      (CLASS_INFO.collect{|class_sym, sh, class_obj|class_obj} + [Unary, Binary, Operation]).
-        inject({:all => proc{|predicate, enumerable|true}}) do |h, class_obj|
-          h[class_obj] = proc{|predicate, enumerable|predicate.is_a?(class_obj)}
-          h
-        end
+  class Equal < Operation; def self.shorthand; :Eq end end
+  class LessThan < Operation; def self.shorthand; :Lt end end
+  class GreaterThan < Operation; def self.shorthand; :Gt end end
+  class GreaterThanOrEqualTo < Operation; def self.shorthand; :Gte end end
+  class LessThanOrEqualTo < Operation; def self.shorthand; :Lte end end
+  
+  
+  module Shorthand
+    def And(left, right) ::Predicated::And.new(left, right) end
+    def Or(left, right) ::Predicated::Or.new(left, right) end
+    def Not(inner) ::Predicated::Not.new(inner) end
 
-    CLASS_INFO.each do |operation_class_name, shorthand, class_object|
-      Predicated.const_set(operation_class_name, class_object)
-      class_object.instance_variable_set("@shorthand".to_sym, shorthand)
-      class_object.class_eval do
-        
-        def self.shorthand
-          @shorthand
-        end
-        
-        include Selectable
-        selector selectors
-      end
-      
-      if class_object.ancestors.include?(Unary)
-        module_eval(%{
-          def #{shorthand}(inner)
-            ::Predicated::#{operation_class_name}.new(inner)
-          end
-        })
-      else
-        module_eval(%{
-          def #{shorthand}(left, right)
-            ::Predicated::#{operation_class_name}.new(left, right)
-          end
-        })
-      end
-    end
+    def Eq(left, right) ::Predicated::Equal.new(left, right) end
+    def Lt(left, right) ::Predicated::LessThan.new(left, right) end
+    def Gt(left, right) ::Predicated::GreaterThan.new(left, right) end
+    def Lte(left, right) ::Predicated::LessThanOrEqualTo.new(left, right) end
+    def Gte(left, right) ::Predicated::GreaterThanOrEqualTo.new(left, right) end    
   end
+  
+  ALL_PREDICATE_CLASSES = [
+    And, Or, Not, 
+    Equal, LessThan, GreaterThan, LessThanOrEqualTo, GreaterThanOrEqualTo
+  ]
 end
 
 require "predicated/print"

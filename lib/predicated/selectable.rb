@@ -84,4 +84,19 @@ module Predicated
     end
   end
 
+  all_basic_selectors = {:all => proc{|predicate, enumerable|true}}.merge(
+    ([Unary, Binary, Operation] + ALL_PREDICATE_CLASSES).inject({}) do |h, klass|
+      h[klass] = proc{|predicate, enumerable|predicate.is_a?(klass)}
+      h
+    end
+  )
+  
+  ALL_PREDICATE_CLASSES.each do |klass|
+    klass.class_eval do 
+      klass.send(:include, Selectable)
+      klass.selector all_basic_selectors
+    end
+  end
 end
+
+

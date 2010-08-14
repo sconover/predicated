@@ -1,3 +1,5 @@
+require "predicated/selectable"
+
 module Predicated
   class Constraints
     def initialize

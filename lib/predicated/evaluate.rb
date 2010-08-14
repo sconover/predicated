@@ -41,7 +41,7 @@ module Predicated
       "Call(#{self.send(:part_inspect,left)}.#{method_sym.to_s}(#{self.send(:part_inspect, right)}))"
     end
   end
-  Predicate.module_eval(%{
+  Shorthand.module_eval(%{
     def Call(left_object, method_sym, right_args=[])
       ::Predicated::Call.new(left_object, method_sym, right_args)
     end
