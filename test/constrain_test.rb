@@ -16,16 +16,25 @@ apropos %{constraints are rules about the content and structure of predicates.
     @not_more_than_two_levels_deep =
       Constraint.new(:name => "Limited to two levels deep",
                      :check_that => proc{|predicate, ancestors| ancestors.length<=2})
+                     
+    @one = Predicate{Eq(1,1)}
+    @two = Predicate{Eq(2,2)}
+    @three = Predicate{Eq(3,3)}
+    
+    @one_and_three = Predicate{And(Eq(1,1), Eq(3,3))}
+    @one_and_two = Predicate{And(Eq(1,1), Eq(2,2))}
+    
+    @deeply_nested = Predicate{Or(Or(And(Eq(1,1), Eq(3,3)), Eq(4,4)), Eq(5,5))}
   end
   
   test "apply to each predicate - simple" do
     constraints = Constraints.new.add(@value_not_equal_to_two)
     
-    assert{ constraints.check(Predicate{Eq(1,1)}).pass? }
-    deny  { constraints.check(Predicate{Eq(1,2)}).pass? }
+    assert{ constraints.check(@one).pass? }
+    deny  { constraints.check(@two).pass? }
     
-    assert{ constraints.check(Predicate{And(Eq(1,1), Eq(1,3))}).pass? }
-    deny  { constraints.check(Predicate{And(Eq(1,1), Eq(1,2))}).pass? }
+    assert{ constraints.check(@one_and_three).pass? }
+    deny  { constraints.check(@one_and_two).pass? }
   end
   
   test "apply each to each predicate - many constraints" do
@@ -34,11 +43,11 @@ apropos %{constraints are rules about the content and structure of predicates.
         add(@value_not_equal_to_two).
         add(@not_more_than_two_levels_deep)
 
-    assert{ constraints.check(Predicate{And(Eq(1,1), Eq(3,3))}).pass? }
-    deny  { constraints.check(Predicate{And(Eq(1,1), Eq(2,2))}).pass? }
+    assert{ constraints.check(@one_and_three).pass? }
+    deny  { constraints.check(@one_and_two).pass? }
     
-    assert{ constraints.check(Predicate{And(Eq(1,1), Eq(3,3))}).pass? }
-    deny  { constraints.check(Predicate{Or(Or(And(Eq(1,1), Eq(3,3)), Eq(4,4)), Eq(5,5))}).pass? }
+    assert{ constraints.check(@one_and_three).pass? }
+    deny  { constraints.check(@deeply_nested).pass? }
   end
 
   test "equality" do
@@ -60,7 +69,7 @@ apropos %{constraints are rules about the content and structure of predicates.
          along with the offending predicates} do
     constraints = Constraints.new.add(@value_not_equal_to_two)
     
-    result = constraints.check(Predicate{Eq(1,1)})
+    result = constraints.check(@one)
     assert{ result.pass? }
     assert{ result.violations == {} }
     
