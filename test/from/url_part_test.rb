@@ -4,7 +4,7 @@ require "predicated/from/url_part"
 require "./test/canonical_transform_cases"
 include Predicated
 
-apropos "parse url parts and convert them into predicates" do
+regarding "parse url parts and convert them into predicates" do
   include CanonicalTransformCases
 
   @expectations = {

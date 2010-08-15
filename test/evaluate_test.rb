@@ -3,9 +3,9 @@ require "./test/test_helper_with_wrong"
 require "predicated/evaluate"
 include Predicated
 
-apropos "evaluate a predicate as boolean logic in ruby.  change the context by providing and optional binding." do
+regarding "evaluate a predicate as boolean logic in ruby.  change the context by providing and optional binding." do
 
-  apropos "proving out basic operations" do
+  regarding "proving out basic operations" do
     test "equals" do
       assert { Predicate { Eq(1, 1) }.evaluate }
       deny   { Predicate { Eq(1, 2) }.evaluate }
@@ -36,7 +36,7 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
     end
   end
 
-  apropos "comparing values of different data types" do
+  regarding "comparing values of different data types" do
     test "strings" do
       assert { Predicate { Eq("1", "1") }.evaluate }
       deny   { Predicate { Eq("1", 1) }.evaluate }
@@ -72,7 +72,7 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
   end
   
   
-  apropos "and" do
+  regarding "and" do
     test "left and right must be true" do
       assert { Predicate { And( Eq(1, 1), Eq(2, 2) ) }.evaluate }
       deny   { Predicate { And( Eq(99, 1), Eq(2, 2) ) }.evaluate }
@@ -93,7 +93,7 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
     end
   end
   
-  apropos "or" do
+  regarding "or" do
     test "one of left or right must be true" do
       assert { Predicate { Or(true, true) }.evaluate }
       assert { Predicate { Or(true, false) }.evaluate }
@@ -102,7 +102,7 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
     end
   end  
   
-  apropos "not" do
+  regarding "not" do
     test "simple negation" do
       assert { Predicate { Not(Eq(3, 2)) }.evaluate }
       deny   { Predicate { Not(Eq(2, 2)) }.evaluate }
@@ -114,7 +114,7 @@ apropos "evaluate a predicate as boolean logic in ruby.  change the context by p
     end
   end  
   
-  apropos "evaluate adds a generic 'call' class.  that is, object.message(args)" do
+  regarding "evaluate adds a generic 'call' class.  that is, object.message(args)" do
     test "evaluate simple calls" do
       assert { Predicate { Call("abc", :include?, "bc") }.evaluate }
       deny   { Predicate { Call("abc", :include?, "ZZ") }.evaluate }

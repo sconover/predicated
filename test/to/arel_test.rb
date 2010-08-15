@@ -6,7 +6,7 @@ unless RUBY_VERSION=="1.8.6"
 require "predicated/to/arel"
 include Predicated
 
-apropos "convert a predicate to an arel where clause" do
+regarding "convert a predicate to an arel where clause" do
   include CanonicalTransformCases
   
   class FakeEngine

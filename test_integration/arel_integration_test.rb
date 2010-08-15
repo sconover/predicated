@@ -15,7 +15,7 @@ def get_from_db_using_predicate(predicate)
     collect{|d|d.first}
 end
 
-apropos "predicates run against a real db" do
+regarding "predicates run against a real db" do
   include CanonicalIntegrationCases
   
   

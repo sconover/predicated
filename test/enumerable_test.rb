@@ -3,7 +3,7 @@ require "./test/test_helper_with_wrong"
 require "predicated/predicate"
 include Predicated
 
-apropos "you can flip through the predicate tree, like any enumerable.  a list of ancestors of each node are provided" do
+regarding "you can flip through the predicate tree, like any enumerable.  a list of ancestors of each node are provided" do
   
   test "simple" do
     assert { Predicate { Eq(1, 2) }.to_a == [[Predicate { Eq(1, 2) }, []]] }

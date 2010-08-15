@@ -3,7 +3,7 @@ require "./test/test_helper_with_wrong"
 require "predicated/predicate"
 include Predicated
 
-apropos "prove value equality" do
+regarding "prove value equality" do
   
   test "simple" do
     assert { Predicate { Eq(1, 1) } == Predicate { Eq(1, 1) } }

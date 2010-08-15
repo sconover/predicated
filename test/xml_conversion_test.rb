@@ -4,7 +4,7 @@ require "predicated/from/xml"
 require "predicated/to/xml"
 include Predicated
 
-apropos "convert xml back and forth" do
+regarding "convert xml back and forth" do
 
   test "string to predicate to string" do
     assert{ Predicate.from_xml("<equal><left>a</left><right>3</right></equal>").to_xml == 

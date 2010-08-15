@@ -2,7 +2,7 @@ require "./test/test_helper_with_wrong"
 
 require "predicated/selectable"
 
-apropos "part one: selectors on an array (simple enumerable).  proving them out more generally." do
+regarding "part one: selectors on an array (simple enumerable).  proving them out more generally." do
   before do
     @arr = [1,2,"c",4,"e",6]
     Predicated::Selectable.bless_enumerable(@arr,
@@ -88,7 +88,7 @@ apropos "part one: selectors on an array (simple enumerable).  proving them out 
 end
 
 include Predicated
-apropos "there are convenient selectors defined for getting things out of a predicate" do
+regarding "there are convenient selectors defined for getting things out of a predicate" do
   class ::Array
     def predicates
       collect{|p, a|p}

@@ -8,7 +8,7 @@ else
 require "predicated/from/callable_object"
 include Predicated
 
-apropos "callable object - canoical transform cases" do
+regarding "callable object - canoical transform cases" do
   include CanonicalTransformCases
 
   @expectations = {

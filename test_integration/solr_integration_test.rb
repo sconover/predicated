@@ -26,14 +26,14 @@ def post_to_solr(body)
   raise "Response #{response.code}\n#{response.body}" unless response.code=="200"
 end
 
-apropos "solr is running properly" do
+regarding "solr is running properly" do
   test "solr schema is the one from this project" do
     assert{ get_from_solr("/solr/admin/file/?file=schema.xml") == File.read("test_integration/schema.xml") }
   end
 end
 
 
-apropos "predicates run against real solr" do
+regarding "predicates run against real solr" do
   include CanonicalIntegrationCases
   
   before do

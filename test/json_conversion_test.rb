@@ -4,7 +4,7 @@ require "predicated/from/json"
 require "predicated/to/json"
 include Predicated
 
-apropos "convert json back and forth" do
+regarding "convert json back and forth" do
 
   test "string to predicate to string" do
     assert{ Predicate.from_json_str(%{["a","==",3]}).to_json_str == 

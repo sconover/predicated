@@ -3,7 +3,7 @@ require "./test/test_helper_with_wrong"
 require "predicated/to/sentence"
 include Predicated
 
-apropos "convert a predicate to an english sentence" do
+regarding "convert a predicate to an english sentence" do
   
   after do
     Operation.reset_verb_phrases

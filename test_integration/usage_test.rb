@@ -5,7 +5,7 @@ require "sqlite3"
 require "active_record"
 require "fileutils"
 
-apropos "prove out examples used in the README" do
+regarding "prove out examples used in the README" do
   
   before do
     unless @created

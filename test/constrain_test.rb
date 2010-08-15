@@ -4,7 +4,7 @@ require "predicated/predicate"
 require "predicated/constrain"
 include Predicated
 
-apropos %{constraints are rules about the content and structure of predicates.
+regarding %{constraints are rules about the content and structure of predicates.
           a predicate might violate a constraint} do
             
   before do

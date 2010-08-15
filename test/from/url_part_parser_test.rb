@@ -4,13 +4,13 @@ require "predicated/predicate"
 require "predicated/from/url_part"
 include Predicated
 
-apropos "parse a url part, the result is a parse tree" do
+regarding "parse a url part, the result is a parse tree" do
   
   before do
     @parser = TreetopUrlPartParser.new
   end
 
-  apropos "simple operations" do
+  regarding "simple operations" do
     
     test "parse" do
       tree = @parser.parse("a=1")
@@ -41,7 +41,7 @@ apropos "parse a url part, the result is a parse tree" do
 
   end
 
-  apropos "simple and" do
+  regarding "simple and" do
     test "parse" do
       tree = @parser.parse("a=1&b=2")
 
@@ -56,7 +56,7 @@ apropos "parse a url part, the result is a parse tree" do
     end
   end
 
-  apropos "simple or" do
+  regarding "simple or" do
     test "parse" do
       tree = @parser.parse("a=1|b=2")
 
@@ -71,7 +71,7 @@ apropos "parse a url part, the result is a parse tree" do
     end
   end
   
-  apropos "complex and/or" do
+  regarding "complex and/or" do
     test "many or's" do
       assert{ @parser.parse("a=1|b=2|c=3").to_predicate == 
         Predicate{ Or( Eq("a", "1"), Or(Eq("b", "2"),Eq("c", "3")) ) } }
@@ -91,7 +91,7 @@ apropos "parse a url part, the result is a parse tree" do
     end
   end
 
-  apropos "parens (force higher precedence)" do
+  regarding "parens (force higher precedence)" do
     test "no effect" do
       str = "(a=1|b=2)|c=3"
       assert{ @parser.parse(str).to_predicate == 
@@ -113,7 +113,7 @@ apropos "parse a url part, the result is a parse tree" do
     end
   end
 
-  apropos "not" do
+  regarding "not" do
     test "force precedence" do
       assert{ @parser.parse("!(a=1)").to_predicate == 
         Predicate{ Not(Eq("a", "1")) } }

@@ -4,7 +4,7 @@ require "./test/canonical_transform_cases"
 require "predicated/to/solr"
 include Predicated
 
-apropos "convert a predicate to a solr query" do
+regarding "convert a predicate to a solr query" do
   include CanonicalTransformCases
   
   @to_expectations = {

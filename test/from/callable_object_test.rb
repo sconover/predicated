@@ -9,9 +9,9 @@ else
 require "predicated/from/callable_object"
 include Predicated
   
-apropos "convert a ruby callable object - a proc or lambda - into a predicate" do
+regarding "convert a ruby callable object - a proc or lambda - into a predicate" do
 
-  apropos "basic operations" do
+  regarding "basic operations" do
                                              
     test "complex types" do
       assert_equal Predicate.from_callable_object{Color.new("red")==Color.new("blue")}, 
@@ -66,7 +66,7 @@ apropos "convert a ruby callable object - a proc or lambda - into a predicate" d
 
   end
   
-  apropos "errors" do
+  regarding "errors" do
     test "predicates only" do
       assert_raises(Predicated::Predicate::DontKnowWhatToDoWithThisSexpError) do 
         Predicate.from_callable_object{a=1}

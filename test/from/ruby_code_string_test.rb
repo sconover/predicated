@@ -3,9 +3,9 @@ require "./test/test_helper"
 require "predicated/from/ruby_code_string"
 include Predicated
 
-apropos "parse a ruby predicate string" do
+regarding "parse a ruby predicate string" do
   
-  apropos "basic operations" do
+  regarding "basic operations" do
     
     #'Wrong'-style asserts are specifically avoided here.
     #the circularity between the two projects will make you crazy if you're not careful
@@ -40,7 +40,7 @@ apropos "parse a ruby predicate string" do
                    Predicate{ And( Or(Eq(1,1),Eq(2,2)), Eq(3,3) ) }
     end
     
-    apropos "only pay attention to the final line" do
+    regarding "only pay attention to the final line" do
       #might hate myself one day for this.  but what else does it make sense to do?
       
       test "simple" do
@@ -87,7 +87,7 @@ apropos "parse a ruby predicate string" do
 
   end
   
-  apropos "errors" do
+  regarding "errors" do
     test "can't parse" do
       assert_raises(Racc::ParseError) do 
         Predicate.from_ruby_code_string("bad ruby @@@@@****()(((")

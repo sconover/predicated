@@ -4,7 +4,7 @@ require "predicated/from/json"
 require "./test/canonical_transform_cases"
 include Predicated
 
-apropos "convert a json string to a predicate" do
+regarding "convert a json string to a predicate" do
   include CanonicalTransformCases
 
   @expectations = {
@@ -44,7 +44,7 @@ apropos "convert a json string to a predicate" do
 
 end
 
-apropos "convert a json structure to a predicate" do
+regarding "convert a json structure to a predicate" do
   include CanonicalTransformCases
 
   @expectations = {

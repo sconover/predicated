@@ -4,7 +4,7 @@ require "./test/canonical_transform_cases"
 require "predicated/from/ruby_code_string"
 include Predicated
 
-apropos "ruby code string - canoical transform cases" do
+regarding "ruby code string - canoical transform cases" do
   include CanonicalTransformCases
 
   @expectations = {

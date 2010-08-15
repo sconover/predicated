@@ -4,7 +4,7 @@ require "./test/canonical_transform_cases"
 require "predicated/to/xml"
 include Predicated
 
-apropos "convert a predicate to an xml string" do
+regarding "convert a predicate to an xml string" do
   include CanonicalTransformCases
   
   @to_expectations = {
