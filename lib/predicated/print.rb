@@ -1,16 +1,16 @@
 module Predicated
   module PrintSupport
-    def to_s(indent="")
-      indent + inspect
+    def inspect(indent="")
+      indent + to_s
     end
 
     private
-    def part_inspect(thing)
-      part_to_str(thing) {|thing| thing.inspect}
+    def part_to_s(thing)
+      part_to_str(thing) {|thing| thing.to_s}
     end
     
-    def part_to_s(thing, indent="")
-      part_to_str(thing, indent) {|thing| thing.to_s(indent)}
+    def part_inspect(thing, indent="")
+      part_to_str(thing, indent) {|thing| thing.inspect(indent)}
     end
     
     def part_to_str(thing, indent="")
@@ -30,25 +30,25 @@ module Predicated
 
   class Unary
     include PrintSupport
-    def inspect
-      "#{self.class.shorthand}(#{part_inspect(inner)})"
+    def to_s
+      "#{self.class.shorthand}(#{part_to_s(inner)})"
     end    
   end
   
   class Binary
     include PrintSupport
-    def inspect
-      "#{self.class.shorthand}(#{part_inspect(left)},#{part_inspect(right)})"
+    def to_s
+      "#{self.class.shorthand}(#{part_to_s(left)},#{part_to_s(right)})"
     end
   end
   
   module ContainerToString
-    def to_s(indent="")
+    def inspect(indent="")
       next_indent = indent + " " + " "
       
       str = "#{indent}#{self.class.shorthand}(\n"
-      str << "#{part_to_s(left, next_indent)},\n"
-      str << "#{part_to_s(right, next_indent)}\n"
+      str << "#{part_inspect(left, next_indent)},\n"
+      str << "#{part_inspect(right, next_indent)}\n"
       str << "#{indent})"
       str << "\n" if indent == ""
       

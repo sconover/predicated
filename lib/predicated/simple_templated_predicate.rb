@@ -56,9 +56,9 @@ module Predicated
   end
   
   class Operation < Binary
-    def inspect
+    def to_s
       if left == Placeholder
-        "#{self.class.shorthand}(#{part_inspect(right)})"
+        "#{self.class.shorthand}(#{part_to_s(right)})"
       else
         super
       end
@@ -66,9 +66,9 @@ module Predicated
   end
 
   class Call < Operation
-    def inspect
+    def to_s
       if left == Placeholder
-        "Call(#{method_sym.to_s}(#{self.send(:part_inspect, right)}))"
+        "Call(#{method_sym.to_s}(#{part_to_s(right)}))"
       else
         super
       end

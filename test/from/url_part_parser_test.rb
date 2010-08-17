@@ -44,7 +44,7 @@ regarding "parse a url part, the result is a parse tree" do
   regarding "simple and" do
     test "parse" do
       tree = @parser.parse("a=1&b=2")
-
+      
       assert{ tree.is_a?(Predicated::TreetopUrlPart::AndNode) }      
       assert{ [[tree.left.left_text, tree.left.sign_text, tree.left.right_text],
                [tree.right.left_text, tree.right.sign_text, tree.right.right_text]] == 

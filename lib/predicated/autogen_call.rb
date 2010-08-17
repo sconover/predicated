@@ -4,14 +4,14 @@ require "predicated/string_utils"
 
 module Predicated
   class AutogenCall < Call
-    def inspect
+    def to_s
       method_cameled = StringUtils.uppercamelize(method_sym.to_s)
       
       if Predicated.const_defined?(:SimpleTemplatedShorthand) && left == Placeholder
-        "#{method_cameled}#{self.send(:right_inspect)}"
+        "#{method_cameled}#{right_to_s}"
       else
-        left_str = self.send(:left_inspect)
-        right_str = self.send(:right_inspect)
+        left_str = left_to_s
+        right_str = right_to_s
         right_str = "," + right_str unless right_str.empty?
         "#{method_cameled}(#{left_str}#{right_str})"
       end
