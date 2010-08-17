@@ -132,6 +132,10 @@ regarding "evaluate a predicate as boolean logic in ruby.  change the context by
       assert { Call.new("abc", :include?, "bc").inspect == "Call('abc'.include?('bc'))" }
     end
     
+    test "inspect, empty right hand side" do
+      assert { Call.new("abc", :nil?).inspect == "Call('abc'.nil?)" }
+    end
+    
     test "call equality" do
       assert { Call.new("abc", :include?, "bc") == Call.new("abc", :include?, "bc") }
       deny   { Call.new("ZZZ", :include?, "bc") == Call.new("abc", :include?, "bc") }

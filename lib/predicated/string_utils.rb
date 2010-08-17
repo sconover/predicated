@@ -10,6 +10,11 @@ module Predicated
         gsub(/([a-z\d])([A-Z])/,'\1_\2').
         tr("-", "_").
         downcase
-     end
+    end
+     
+    def self.uppercamelize(lower_case_and_underscored_word)
+      lower_case_and_underscored_word.to_s.gsub(/\/(.?)/) { "::" + $1.upcase }.gsub(/(^|_)(.)/) { $2.upcase }
+    end
+    
   end
 end

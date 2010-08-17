@@ -20,6 +20,8 @@ module Predicated
         thing.to_s
       elsif thing.is_a?(Binary)
         yield(thing)
+      elsif thing.nil?
+        "nil"
       else
         "#{thing.class.name}{'#{thing.to_s}'}"
       end

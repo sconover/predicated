@@ -26,4 +26,12 @@ regarding "if an unknown shorthand method is invoked, assume it's meant to be a 
       Predicate { Or(AutogenCall.new("abc", :nil?),AutogenCall.new("abc", :include?, "bc")) } }
   end
   
+  test "to_s, inspect" do
+    assert{ Predicate { Include?("abc", "bc") }.to_s == "Include?('abc',('bc'))" }
+    assert{ Predicate { Nil?(nil) }.to_s == "Nil?(nil)" }
+
+    assert{ Predicate { Include?("abc", "bc") }.inspect == "Include?('abc',('bc'))" }
+    assert{ Predicate { Nil?(nil) }.inspect == "Nil?(nil)" }
+  end
+
 end

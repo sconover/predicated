@@ -38,7 +38,16 @@ module Predicated
     end    
     
     def inspect
-      "Call(#{self.send(:part_inspect,left)}.#{method_sym.to_s}(#{self.send(:part_inspect, right)}))"
+      "Call(#{left_inspect}.#{method_sym.to_s}#{right_inspect})"
+    end
+    
+    private 
+    def left_inspect
+      self.send(:part_inspect,left)
+    end
+
+    def right_inspect
+      right.empty? ? "" : "(" + self.send(:part_inspect,right) + ")"
     end
   end
   Shorthand.module_eval(%{

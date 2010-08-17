@@ -17,6 +17,10 @@ regarding "a predicate looks nice with you inspect it" do
     assert { Predicate { Eq("foo", "bar") }.inspect == "Eq('foo','bar')" }
   end
 
+  test "nil" do
+    assert { Predicate { Eq("foo", nil) }.inspect == "Eq('foo',nil)" }
+  end
+
   test "objects" do
     assert {
       Predicate {
