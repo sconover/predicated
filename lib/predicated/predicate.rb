@@ -2,8 +2,6 @@ require "predicated/gem_check"
 
 module Predicated
 
-  
-  
   def Predicate(&block)
     result = nil
     Module.new do
