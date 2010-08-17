@@ -5,7 +5,7 @@ require "predicated/predicate"
 require "predicated/to/arel"
 include Predicated
 
-require "sqlite3"
+require "sqlite3-ruby"
 require "active_record"
 
 
@@ -24,7 +24,7 @@ regarding "predicates run against a real db" do
       db_file = "/tmp/sqlite_db"
       FileUtils.rm_f(db_file)
       @db = SQLite3::Database.new(db_file)
-      ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database  => db_file)
+      ActiveRecord::Base.establish_connection(:adapter => "sqlite3-ruby", :database  => db_file)
       @db.execute(%{
         create table widget (
           id INTEGER PRIMARY KEY, 
