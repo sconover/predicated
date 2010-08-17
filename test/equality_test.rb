@@ -24,3 +24,9 @@ regarding "prove value equality" do
   end
 
 end
+
+regarding "predicate base class.  not sure I'm happy with the implementation...too tricky" do
+  test "all predicates descend from a predicate base class.  it's a marker class" do
+    assert{ And.new(Equal.new(1,1),Equal.new(2,2)).is_a?(Predicate) }
+  end
+end

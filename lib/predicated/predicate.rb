@@ -1,6 +1,9 @@
 require "predicated/gem_check"
 
 module Predicated
+
+  
+  
   def Predicate(&block)
     result = nil
     Module.new do
@@ -10,7 +13,9 @@ module Predicated
     result
   end
   
-  class Unary
+  class Predicate; end #marker class
+  
+  class Unary < Predicate
     attr_accessor :inner
     
     def initialize(inner)
@@ -36,7 +41,7 @@ module Predicated
     include ValueEquality
   end
   
-  class Binary
+  class Binary < Predicate
     attr_accessor :left, :right
     
     def initialize(left, right)

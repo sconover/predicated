@@ -4,7 +4,7 @@ module Predicated
 
   require_gem_version("json", "1.1.9")
 
-  module Predicate
+  class Predicate
     def self.from_json_str(json_str)
       from_json_struct(JSON.parse(json_str))
     end

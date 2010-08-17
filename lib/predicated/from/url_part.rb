@@ -4,7 +4,7 @@ module Predicated
   
   require_gem_version("treetop", "1.4.8")
   
-  module Predicate
+  class Predicate
     def self.from_url_part(url_part)
       TreetopUrlPartParser.new.parse(url_part).to_predicate
     end

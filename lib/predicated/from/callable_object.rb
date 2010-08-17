@@ -36,7 +36,7 @@ module Predicated
   
   require_gem_version("ParseTree", "3.0.5", "parse_tree") if RUBY_VERSION < "1.9"
   
-  module Predicate
+  class Predicate
 
                                   #hrm
     def self.from_callable_object(context_or_callable_object=nil, context=nil, &block)

@@ -4,7 +4,7 @@ module Predicated
 
   require_gem_version("nokogiri", "1.4.3")
 
-  module Predicate
+  class Predicate
     def self.from_xml(xml_str)
       NodeToPredicate.convert(Nokogiri::XML(xml_str).root)
     end
