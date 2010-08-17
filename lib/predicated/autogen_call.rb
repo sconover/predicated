@@ -12,7 +12,7 @@ module Predicated
     end
   end
 
-  module CurriedShorthand
+  module SimpleTemplatedShorthand
     def method_missing(uppercase_cameled_method_sym, *args)
       method_sym = StringUtils.underscore(uppercase_cameled_method_sym.to_s).to_sym
       object = args

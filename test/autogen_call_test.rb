@@ -1,6 +1,6 @@
 require "./test/test_helper_with_wrong"
 
-require "predicated/curried_predicate"
+require "predicated/simple_templated_predicate"
 require "predicated/autogen_call"
 
 include Predicated
@@ -22,7 +22,7 @@ regarding "if an unknown shorthand method is invoked, assume it's meant to be a 
   end
   
   test "looks neato when used with currying" do
-    assert{ CurriedPredicate{ Or(Nil?,Include?("bc")) }.apply("abc") == 
+    assert{ SimpleTemplatedPredicate{ Or(Nil?,Include?("bc")) }.fill_in("abc") == 
       Predicate { Or(Call("abc", :nil?),Call("abc", :include?, "bc")) } }
   end
   

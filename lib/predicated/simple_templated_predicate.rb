@@ -2,46 +2,46 @@ require "predicated/predicate"
 require "predicated/evaluate"
 
 module Predicated
-  def CurriedPredicate(&block)
+  def SimpleTemplatedPredicate(&block)
     result = nil
     Module.new do
-      extend CurriedShorthand
+      extend SimpleTemplatedShorthand
       result = instance_eval(&block)
     end
     result
   end
   
   class And
-    def apply(replace_placeholder)
-      And.new(left.apply(replace_placeholder), right.apply(replace_placeholder))
+    def fill_in(placeholder_replacement)
+      And.new(left.fill_in(placeholder_replacement), right.fill_in(placeholder_replacement))
     end
   end
   
   class Or
-    def apply(replace_placeholder)
-      Or.new(left.apply(replace_placeholder), right.apply(replace_placeholder))
+    def fill_in(placeholder_replacement)
+      Or.new(left.fill_in(placeholder_replacement), right.fill_in(placeholder_replacement))
     end
   end
   
   class Not
-    def apply(replace_placeholder)
-      Not.new(inner.apply(replace_placeholder))
+    def fill_in(placeholder_replacement)
+      Not.new(inner.fill_in(placeholder_replacement))
     end
   end
   
   class Operation
-    def apply(replace_placeholder)
-      self.class.new(replace_placeholder, right)
+    def fill_in(placeholder_replacement)
+      self.class.new(placeholder_replacement, right)
     end
   end
   
   class Call
-    def apply(replace_placeholder)
-      self.class.new(replace_placeholder, method_sym, right)
+    def fill_in(placeholder_replacement)
+      self.class.new(placeholder_replacement, method_sym, right)
     end
   end
   
-  module CurriedShorthand
+  module SimpleTemplatedShorthand
     include Shorthand
 
     def Eq(right) ::Predicated::Equal.new(:placeholder, right) end
