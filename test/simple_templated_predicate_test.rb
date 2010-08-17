@@ -29,4 +29,11 @@ regarding "simple templated predicates.  the left sides of operations and calls 
               Predicate { Call("abc", :nil?) } }
   end
   
+  test "to_s and inspect" do
+    assert{ SimpleTemplatedPredicate{ Eq(1) }.inspect == "Eq(1)" }
+    assert{ SimpleTemplatedPredicate{ Eq(1) }.to_s == "Eq(1)" }
+    
+    assert{ SimpleTemplatedPredicate{ Call(:include?, "bc") }.inspect == "Call(include?('bc'))" }
+    assert{ SimpleTemplatedPredicate{ Call(:include?, "bc") }.to_s == "Call(include?('bc'))" }
+  end
 end

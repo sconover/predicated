@@ -41,16 +41,39 @@ module Predicated
     end
   end
   
+  class Placeholder; end
+  
   module SimpleTemplatedShorthand
     include Shorthand
+    
+    def Eq(right) ::Predicated::Equal.new(Placeholder, right) end
+    def Lt(right) ::Predicated::LessThan.new(Placeholder, right) end
+    def Gt(right) ::Predicated::GreaterThan.new(Placeholder, right) end
+    def Lte(right) ::Predicated::LessThanOrEqualTo.new(Placeholder, right) end
+    def Gte(right) ::Predicated::GreaterThanOrEqualTo.new(Placeholder, right) end    
 
-    def Eq(right) ::Predicated::Equal.new(:placeholder, right) end
-    def Lt(right) ::Predicated::LessThan.new(:placeholder, right) end
-    def Gt(right) ::Predicated::GreaterThan.new(:placeholder, right) end
-    def Lte(right) ::Predicated::LessThanOrEqualTo.new(:placeholder, right) end
-    def Gte(right) ::Predicated::GreaterThanOrEqualTo.new(:placeholder, right) end    
-
-    def Call(method_sym, right=[]) ::Predicated::Call.new(:placeholder, method_sym, right) end    
+    def Call(method_sym, right=[]) ::Predicated::Call.new(Placeholder, method_sym, right) end    
   end
+  
+  class Operation < Binary
+    def inspect
+      if left == Placeholder
+        "#{self.class.shorthand}(#{part_inspect(right)})"
+      else
+        super
+      end
+    end
+  end
+
+  class Call < Operation
+    def inspect
+      if left == Placeholder
+        "Call(#{method_sym.to_s}(#{self.send(:part_inspect, right)}))"
+      else
+        super
+      end
+    end
+  end
+  
   
 end
