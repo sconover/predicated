@@ -47,7 +47,7 @@ module Predicated
     end
 
     def right_to_s
-      right.empty? ? "" : "(" + part_to_s(right) + ")"
+      right.empty? ? "" : "(" + right.collect{|arg|part_to_s(arg)}.join(",") + ")"
     end
   end
   Shorthand.module_eval(%{
