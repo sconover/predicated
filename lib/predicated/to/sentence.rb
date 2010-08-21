@@ -5,7 +5,7 @@ module Predicated
   
   module ContainerSentence
     def to_sentence
-      left.to_sentence + "#{joining_str}" + right.to_sentence
+      left.to_sentence + joining_str + right.to_sentence
     end
 
     def to_negative_sentence
@@ -86,16 +86,9 @@ module Predicated
     end
         
     def format_value(value)
-      if value.is_a?(String)
-        "'" + value.to_s + "'"
-      elsif value.nil?
-        "nil"
-      elsif value.is_a?(Numeric) || value.is_a?(TrueClass) || value.is_a?(FalseClass)
-        value.to_s
-      else
-        "'" + value.inspect + "'"
-      end
+      value.inspect
     end
+
   end
   
 end

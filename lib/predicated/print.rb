@@ -28,14 +28,14 @@ module Predicated
     end
   end
 
-  class Unary
+  class Unary < Predicate
     include PrintSupport
     def to_s
       "#{self.class.shorthand}(#{part_to_s(inner)})"
     end    
   end
   
-  class Binary
+  class Binary < Predicate
     include PrintSupport
     def to_s
       "#{self.class.shorthand}(#{part_to_s(left)},#{part_to_s(right)})"

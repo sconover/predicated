@@ -3,7 +3,7 @@ require "predicated/predicate"
 module Predicated
   
   
-  class Operation
+  class Operation < Binary
     attr_reader :method_sym
     
     def initialize(left, method_sym, right)
@@ -47,7 +47,9 @@ module Predicated
     end
 
     def right_to_s
-      right.empty? ? "" : "(" + right.collect{|arg|part_to_s(arg)}.join(",") + ")"
+      values = right.is_a?(::Enumerable) ? right : [right]
+      values.empty? ? "" :
+        "(" + values.collect{|arg|part_to_s(arg)}.join(",") + ")"
     end
   end
   Shorthand.module_eval(%{
