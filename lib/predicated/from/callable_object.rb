@@ -2,13 +2,13 @@ require "predicated/predicate"
 require "predicated/from/ruby_code_string"
 
 
-raise %{
-
-This will never work in ruby 1.9.
-
-see http://blog.zenspider.com/2009/04/parsetree-eol.html
-  
-} if RUBY_VERSION =~/^1.9/
+#raise %{
+#
+#This will never work in ruby 1.9.
+#
+#see http://blog.zenspider.com/2009/04/parsetree-eol.html
+#
+#} if RUBY_VERSION =~/^1.9/
 
 raise %{
   
