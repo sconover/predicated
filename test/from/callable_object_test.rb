@@ -21,7 +21,7 @@ regarding "convert a ruby callable object - a proc or lambda - into a predicate"
         Predicate{ Eq({1=>2},{"a"=>"b"}) }
     end                                      
                                              
-    test "word and / or" do                
+    test "word and / or" do
       assert_equal Predicate.from_callable_object{1==1 and 2==2}, Predicate{ And(Eq(1,1),Eq(2,2)) }
       assert_equal Predicate.from_callable_object{1==1 or 2==2}, Predicate{ Or(Eq(1,1),Eq(2,2)) }
     end
