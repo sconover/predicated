@@ -1,6 +1,6 @@
 require "predicated/predicate"
 require "predicated/from/ruby_code_string"
-
+require "fileutils"
 
 #raise %{
 #
@@ -10,26 +10,7 @@ require "predicated/from/ruby_code_string"
 #
 #} if RUBY_VERSION =~/^1.9/
 
-raise %{
-  
-You appear to be using ruby 1.8.7 and you don't have 
-an INLINEDIR environment variable set to a valid directory.
-
-ParseTree (used by "from_callable_object") uses RubyInline.
-RubyInline requires that the INLINEDIR environment variable point
-to a directory.  The easiest thing to do is to just go
-create a directory somewhere - let's say, ~/inlinedir,
-and point the INLINEDIR at it.  In bash this would be:
-
-mkdir ~/inlinedir
-export INLINEDIR=~/inlinedir
-
-You'll probably want to put this in .bash_profile too.
-
-Sorry for the inconvenience.  I hope the value you'll
-get out of "from_callable_object" makes it all worth it.
-
-} if RUBY_VERSION=="1.8.7" && !ENV["INLINEDIR"]
+FileUtils.mkdir_p("~/.ruby_inline") unless File.exists?("~/.ruby_inline")
 #Procs and lambdas are "callable objects"
 
 module Predicated
