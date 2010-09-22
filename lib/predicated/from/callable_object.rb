@@ -1,10 +1,6 @@
 require "predicated/predicate"
 require "predicated/from/ruby_code_string"
 
-# this should not be necessary; check on fresh system if RubyInline works OK
-require "fileutils"
-FileUtils.mkdir_p("~/.ruby_inline") unless File.exists?("~/.ruby_inline")
-
 #Procs and lambdas are "callable objects"
 module Predicated
   
