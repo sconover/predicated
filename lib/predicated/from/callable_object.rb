@@ -1,17 +1,11 @@
 require "predicated/predicate"
 require "predicated/from/ruby_code_string"
 
-
-#raise %{
-#
-#This will never work in ruby 1.9.
-#
-#see http://blog.zenspider.com/2009/04/parsetree-eol.html
-#
-#} if RUBY_VERSION =~/^1.9/
+# this should not be necessary; check on fresh system if RubyInline works OK
+require "fileutils"
+FileUtils.mkdir_p("~/.ruby_inline") unless File.exists?("~/.ruby_inline")
 
 #Procs and lambdas are "callable objects"
-
 module Predicated
   
   require_gem_version("ParseTree", "3.0.5", "parse_tree") if RUBY_VERSION < "1.9"
