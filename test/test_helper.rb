@@ -1,6 +1,7 @@
 dir = File.dirname(__FILE__)
 $LOAD_PATH.unshift "#{dir}/../lib"
-$LOAD_PATH.unshift "../wrong/lib"
+$LOAD_PATH.unshift "../wrong/lib" # this assumes that Wrong is checked out as a sibling
+
 require "rubygems"
 require "minitest/spec"
 require "pp"

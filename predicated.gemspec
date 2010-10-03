@@ -4,7 +4,7 @@ require File.expand_path('../lib/predicated/version.rb', __FILE__)
 Gem::Specification.new do |s|
   s.name      = "predicated"
   s.version   = Predicated::VERSION
-  s.authors   = ["Steve Conover"]
+  s.authors   = ["Steve Conover", "Alex Chaffee"]
   s.date      = %q{2010-07-06}
   s.email     = "sconover@gmail.com"
   s.homepage  = "http://github.com/sconover/predicated"

@@ -2,7 +2,6 @@ source :gemcutter
 gem "ruby_parser"
 gem "ruby2ruby"
 gem "ParseTree"
-gem "diff"
 gem "diff-lcs"
 gem "minitest"
 gem "nokogiri"
@@ -12,4 +11,3 @@ gem "activerecord", "~>3.0.0.beta"
 gem "i18n"
 gem "json", "1.1.9"
 gem "treetop", "~>1.4.8"
-
