@@ -2,3 +2,4 @@ pkg
 .idea
 .bundler
 .bundle
+Gemfile.lock
