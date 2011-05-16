@@ -17,6 +17,5 @@ Predicated is a simple predicate model for Ruby.
   s.files      = Dir['lib/**/*']
   s.test_files = Dir['test/**/*.rb']
 
-  s.has_rdoc = true
   s.extra_rdoc_files = %w[README.markdown]
 end
