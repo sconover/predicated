@@ -5,7 +5,6 @@ Gem::Specification.new do |s|
   s.name      = "predicated"
   s.version   = Predicated::VERSION
   s.authors   = ["Steve Conover", "Alex Chaffee"]
-  s.date      = %q{2010-07-06}
   s.email     = "sconover@gmail.com"
   s.homepage  = "http://github.com/sconover/predicated"
   s.summary   = "Predicated is a simple predicate model for Ruby"
